@@ -21,6 +21,24 @@
             position: relative;
         }
 
+
+        .start-screen {
+    text-align: center;
+    padding: 40px 20px;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.start-screen * {
+    pointer-events: none;  /* Make child elements not block clicks */
+}
+
+.start-screen .tap-cta {
+    pointer-events: auto;  /* Keep button clickable too */
+}
+
         /* Image backgrounds - will be loaded dynamically */
         .cat-pattern-bg {
             background-image: url('data:image/placeholder');
@@ -234,7 +252,7 @@
             }
         }
 
-
+/* flying cat */
         .flying-cat {
     position: fixed;
     width: 100px;
@@ -243,24 +261,44 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    top: 20%;
-    left: -120px;
-    animation: flyAcross 8s linear infinite;
     z-index: 500;
     pointer-events: none;
 }
 
-@keyframes flyAcross {
+.flying-right {
+    animation: flyRight 6s linear infinite;
+}
+
+.flying-left {
+    animation: flyLeft 6s linear infinite;
+    transform: scaleX(-1);
+}
+
+@keyframes flyRight {
     0% { 
         left: -120px; 
         transform: translateY(0px) rotate(0deg);
     }
     50% { 
-        transform: translateY(-20px) rotate(5deg);
+        transform: translateY(-15px) rotate(3deg);
     }
     100% { 
         left: 100vw; 
         transform: translateY(0px) rotate(0deg);
+    }
+}
+
+@keyframes flyLeft {
+    0% { 
+        right: -120px; 
+        transform: scaleX(-1) translateY(0px) rotate(0deg);
+    }
+    50% { 
+        transform: scaleX(-1) translateY(-15px) rotate(-3deg);
+    }
+    100% { 
+        right: 100vw; 
+        transform: scaleX(-1) translateY(0px) rotate(0deg);
     }
 }
 
@@ -406,6 +444,7 @@
             border-radius: 15px;
             margin: 15px 0;
             animation: messageFloat 4s ease-in-out infinite;
+            font-weight: 600;
         }
 
         @keyframes messageFloat {
@@ -510,6 +549,7 @@
             line-height: 1.6;
             color: #8B4513;
             text-align: center;
+            font-weight: 600;
         }
 
         .signature {
@@ -771,7 +811,7 @@
             <div class="character-image"></div>
             <div class="paper-texture-overlay"></div>
         </div>
-        <div class="tap-cta">Click to open the scrapbook</div>
+        <div class="tap-cta">Tap to open the scrapbook</div>
     </div>
 
     <!-- Scene 1: Title Page -->
@@ -1032,21 +1072,35 @@
         // Load images when page loads
         window.addEventListener('load', loadImages);
 
-        // Start the experience - both click and touch
-        document.getElementById('scene0').addEventListener('click', startScrapbook);
-document.getElementById('scene0').addEventListener('touchend', function(e) {
-    e.preventDefault();
-    startScrapbook();
-});
+        function setupStartScreen() {
+    const startScreen = document.getElementById('scene0');
+    
+    startScreen.addEventListener('click', function(e) {
+        e.preventDefault();
+        startScrapbook();
+    });
+    
+    startScreen.addEventListener('touchend', function(e) {
+        e.preventDefault();
+        startScrapbook();
+    });
+    
+    // Make the entire screen area clickable
+    startScreen.style.cursor = 'pointer';
+}
+
+// Call setup when page loads
+setupStartScreen();
 
 function startScrapbook() {
     nextScene();
     createPaperCrumbs();
     createConfetti();
     // Show click hint after first page
+    createFlyingCats();
     setTimeout(() => {
         document.getElementById('clickHint').style.display = 'block';
-    }, 2000);
+    }, 1000);
 }
 
 function createConfetti() {
@@ -1182,6 +1236,29 @@ document.addEventListener('touchend', (e) => {
                 }
             }
         });
+
+
+        function createFlyingCats() {
+    setInterval(() => {
+        if (Math.random() < 0.3) {
+            const cat = document.createElement('div');
+            cat.className = 'flying-cat';
+            cat.style.top = Math.random() * 60 + 10 + '%';
+            
+            if (Math.random() > 0.5) {
+                cat.classList.add('flying-right');
+            } else {
+                cat.classList.add('flying-left');  
+            }
+            
+            document.body.appendChild(cat);
+            
+            setTimeout(() => {
+                cat.remove();
+            }, 6000);
+        }
+    }, 2000);
+}
     </script>
 </body>
 </html>
