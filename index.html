@@ -362,56 +362,37 @@
     justify-content: flex-start;
     align-items: flex-start;
 }
-.cat-layer {
-    position: absolute;
-    background: #fefefe;
-    border-radius: 20px;
-    padding: 10px 8px !important;
-    text-align: center;
-    font-size: 0.8rem !important;
-    font-weight: 600;
-    color: #8B4513;
-    animation: layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-    opacity: 0;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    line-height: 1.2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+/* Cat layers */
+.cat-layers {
+  position: relative;
+  width: 450px !important;
+  height: 350px !important;
 }
+
 .cat-layer1 {
-    top: 0px;
-    left: 0px;
-    width: 130px !important;
-    height: 110px !important;
-    background: #ffe6f2;
-    animation-delay: 1s;
-    transform: rotate(-3deg);
-    z-index: 3;
+  top: 0px;
+  left: 0px;
+  width: 130px !important;
+  height: 110px !important;
+  transform: rotate(-3deg);
 }
 
 .cat-layer2 {
-    top: 0px;
-    right: 0px;
-    width: 130px !important;
-    height: 110px !important;
-    background: #e6f3ff;
-    animation-delay: 1.3s;
-    transform: rotate(2deg);
-    z-index: 2;
+  top: 0px;
+  right: 0px;
+  width: 130px !important;
+  height: 110px !important;
+  transform: rotate(2deg);
 }
 
 .cat-layer3 {
-    bottom: 0px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-1deg);
-    width: 130px !important;
-    height: 110px !important;
-    background: #f0ffe6;
-    animation-delay: 1.6s;
-    z-index: 1;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 130px !important;
+  height: 110px !important;
 }
+
 
         @keyframes layerPop {
             0% {
@@ -489,55 +470,34 @@
     min-width: 500px !important;
 }
 
-        .matcha-piece {
-            position: absolute;
-            background: #c8e6c9;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            color: #2e7d32;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-            opacity: 0;
-        }
+.matcha-piece {
+  position: absolute;
+}
 
-  .piece1 {
-    top: 10px;
-    left: 10px;
-    width: 120px;
-    animation-delay: 1.2s;
-    transform: translateX(-100px) rotate(-5deg);
+.piece1 {
+  top: 10px;
+  left: 10px;
+  width: 120px;
 }
 
 .piece2 {
-    top: 10px;
-    right: 10px;
-    width: 120px;
-    background: #fff3e0;
-    color: #e65100;
-    animation-delay: 1.5s;
-    transform: translateX(100px) rotate(3deg);
+  top: 10px;
+  right: 10px;
+  width: 120px;
 }
 
 .piece3 {
-    bottom: 10px;
-    left: 10px;
-    width: 120px;
-    background: #f3e5f5;
-    color: #7b1fa2;
-    animation-delay: 1.8s;
-    transform: translateY(100px) rotate(-2deg);
+  bottom: 10px;
+  left: 10px;
+  width: 120px;
 }
 
 .piece4 {
-    bottom: 10px;
-    right: 10px;
-    width: 120px;
-    background: #e8f5e8;
-    color: #388e3c;
-    animation-delay: 2.1s;
-    transform: translateY(100px) rotate(4deg);
+  bottom: 10px;
+  right: 10px;
+  width: 120px;
 }
+
 
         @keyframes pieceSlide {
             0% {
@@ -647,63 +607,114 @@
 
         /* Mobile responsive */
 @media (max-width: 480px) {
-    .scrapbook-cover { width: 250px; height: 330px; }
-    .cover-title { font-size: 1.8rem; }
-    .magazine-title { font-size: 2.2rem; }
-    .title-card { width: 280px; }
-    .cat-layers { width: 280px !important; height: 250px !important; min-width: 280px !important; }
-    .capybara-craft { width: 300px !important; padding: 25px 20px !important; min-width: 300px !important; }
-    .matcha-collage { width: 310px !important; height: 280px !important; min-width: 310px !important; }
-    .love-letter { width: 320px !important; padding: 35px 25px !important; min-width: 320px !important; }
-    
-    /* Much smaller cat layers */
-    .cat-layer1, .cat-layer2, .cat-layer3 {
-        width: 100px !important;
-        height: 200px !important;
-    }
-    
-    .cat-layer1 { top: 0px; left: 5px; }
-    .cat-layer2 { top: 45px; left: 175px; }
-    .cat-layer3 { top: 100px; left: 5px; }
-    
-    .cat-layer {
-        padding: 10px !important;
-        font-size: 0.9rem !important;
-    }
+  /* Scrapbook cover */
+  .scrapbook-cover {
+    width: 250px;
+    height: 330px;
+  }
+  .cover-title {
+    font-size: 1.8rem;
+  }
+
+  /* Title card */
+  .title-card {
+    width: 280px;
+  }
+  .magazine-title {
+    font-size: 2.2rem;
+  }
+
+  /* Cat layers */
+  .cat-layers {
+    width: 280px !important;
+    height: 250px !important;
+    min-width: 280px !important;
+  }
+  .cat-layer1, .cat-layer2, .cat-layer3 {
+    width: 100px !important;
+    height: 200px !important;
+  }
+  .cat-layer1 {
+    top: 0px;
+    left: 5px;
+  }
+  .cat-layer2 {
+    top: 0px;
+    left: 155px;
+  }
+  .cat-layer3 {
+    top: 200px;
+    left: 5px;
+  }
+  .cat-layer {
+    padding: 10px !important;
+    font-size: 0.9rem !important;
+  }
+
+  /* Capybara craft */
+  .capybara-craft {
+    width: 300px !important;
+    padding: 25px 20px !important;
+    min-width: 300px !important;
+  }
+
+  /* Matcha collage */
+  .matcha-collage {
+    width: 310px !important;
+    height: 280px !important;
+    min-width: 310px !important;
+  }
+
+  /* Love letter */
+  .love-letter {
+    width: 320px !important;
+    padding: 35px 25px !important;
+    min-width: 320px !important;
+  }
+
+  /* General styles */
+  .scene {
+    padding: 15px 5px;
+  }
+  body {
+    overflow-x: hidden;
+  }
 }
 
-@media (max-width: 480px) {
-    .cat-layers { width: 300px !important; height: 280px !important; min-width: 300px !important; }
-    .matcha-collage { width: 320px !important; height: 300px !important; min-width: 320px !important; }
-}
-
+/* Additional media query for smaller screens */
 @media (max-width: 320px) {
-    .scrapbook-cover { width: 220px; height: 300px; }
-    .cover-title { font-size: 1.6rem; }
-    .magazine-title { font-size: 2rem; }
-    .title-card { width: 250px; }
-    .cat-layers { width: 290px !important; height: 280px !important; min-width: 290px !important; }
-    .capybara-craft { width: 310px !important; padding: 25px 20px !important; min-width: 310px !important; }
-    .matcha-collage { width: 320px !important; height: 300px !important; min-width: 320px !important; }
-    .love-letter { width: 330px !important; padding: 35px 25px !important; min-width: 330px !important; }
-    
-    .cat-layer1, .cat-layer2, .cat-layer3 {
-        width: 140px;
-        height: 100px;
-    }
-    
-    .cat-layer { font-size: 0.9rem; padding: 12px 10px; }
+  .scrapbook-cover {
+    width: 220px;
+    height: 300px;
+  }
+  .cover-title {
+    font-size: 1.6rem;
+  }
+  .title-card {
+    width: 250px;
+  }
+  .cat-layers {
+    width: 290px !important;
+    height: 280px !important;
+    min-width: 290px !important;
+  }
+  .capybara-craft {
+    width: 310px !important;
+    padding: 25px 20px !important;
+    min-width: 310px !important;
+  }
+  .matcha-collage {
+    width: 320px !important;
+    height: 300px !important;
+    min-width: 320px !important;
+  }
+  .love-letter {
+    width: 330px !important;
+    padding: 35px 25px !important;
+    min-width: 330px !important;
+  }
 }
 
-@media (max-width: 480px) {
-    .scene {
-        padding: 15px 5px;
-    }
-    
-    body {
-        overflow-x: hidden;
-    }
-}
 
         /* Craft decorations */
         .washi-tape {
