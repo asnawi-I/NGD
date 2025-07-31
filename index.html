@@ -344,11 +344,7 @@
     animation: magazinePop 2s ease-out infinite;
 }
 
-@keyframes magazinePop {
-    0%, 100% { transform: scale(1) rotate(0deg); }
-    50% { transform: scale(1.05) rotate(1deg); }
-}
-        .subtitle-cutout {
+       .subtitle-cutout {
             font-size: 1.2rem;
             color: #6f42c1;
             background: #fff3cd;
@@ -382,21 +378,25 @@
     position: absolute;
     background: #fefefe;
     border-radius: 20px;
-    padding: 25px 20px;
+    padding: 10px 8px !important;
     text-align: center;
-    font-size: 1.1rem;
+    font-size: 0.8rem !important;
     font-weight: 600;
     color: #8B4513;
     animation: layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
     opacity: 0;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    line-height: 1.2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-
- .cat-layer1 {
-    top: 20px;
-    left: 20px;
-    width: 200px;
-    height: 150px;
+.cat-layer1 {
+    top: 0px;
+    left: 0px;
+    width: 130px !important;
+    height: 110px !important;
     background: #ffe6f2;
     animation-delay: 1s;
     transform: rotate(-3deg);
@@ -404,10 +404,10 @@
 }
 
 .cat-layer2 {
-    top: 80px;
-    left: 80px;
-    width: 200px;
-    height: 150px;
+    top: 0px;
+    right: 0px;
+    width: 130px !important;
+    height: 110px !important;
     background: #e6f3ff;
     animation-delay: 1.3s;
     transform: rotate(2deg);
@@ -415,13 +415,13 @@
 }
 
 .cat-layer3 {
-    top: 140px;
-    left: 40px;
-    width: 200px;
-    height: 150px;
+    bottom: 0px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1deg);
+    width: 130px !important;
+    height: 110px !important;
     background: #f0ffe6;
     animation-delay: 1.6s;
-    transform: rotate(-1deg);
     z-index: 1;
 }
 
@@ -513,43 +513,43 @@
             opacity: 0;
         }
 
-        .piece1 {
-            top: 20px;
-            left: 10px;
-            width: 140px;
-            animation-delay: 1.2s;
-            transform: translateX(-100px) rotate(-5deg);
-        }
+  .piece1 {
+    top: 10px;
+    left: 10px;
+    width: 120px;
+    animation-delay: 1.2s;
+    transform: translateX(-100px) rotate(-5deg);
+}
 
-        .piece2 {
-            top: 80px;
-            right: 20px;
-            width: 160px;
-            background: #fff3e0;
-            color: #e65100;
-            animation-delay: 1.5s;
-            transform: translateX(100px) rotate(3deg);
-        }
+.piece2 {
+    top: 10px;
+    right: 10px;
+    width: 120px;
+    background: #fff3e0;
+    color: #e65100;
+    animation-delay: 1.5s;
+    transform: translateX(100px) rotate(3deg);
+}
 
-        .piece3 {
-            bottom: 60px;
-            left: 20px;
-            width: 180px;
-            background: #f3e5f5;
-            color: #7b1fa2;
-            animation-delay: 1.8s;
-            transform: translateY(100px) rotate(-2deg);
-        }
+.piece3 {
+    bottom: 10px;
+    left: 10px;
+    width: 120px;
+    background: #f3e5f5;
+    color: #7b1fa2;
+    animation-delay: 1.8s;
+    transform: translateY(100px) rotate(-2deg);
+}
 
-        .piece4 {
-            bottom: 20px;
-            right: 10px;
-            width: 120px;
-            background: #e8f5e8;
-            color: #388e3c;
-            animation-delay: 2.1s;
-            transform: translateY(100px) rotate(4deg);
-        }
+.piece4 {
+    bottom: 10px;
+    right: 10px;
+    width: 120px;
+    background: #e8f5e8;
+    color: #388e3c;
+    animation-delay: 2.1s;
+    transform: translateY(100px) rotate(4deg);
+}
 
         @keyframes pieceSlide {
             0% {
@@ -602,10 +602,6 @@
             animation: signatureDraw 3s ease-in-out infinite;
         }
 
-        @keyframes signatureDraw {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.05); opacity: 0.8; }
-        }
 
         /* Navigation dots */
         .nav-dots {
@@ -686,6 +682,11 @@
         padding: 10px 8px !important;
         font-size: 0.9rem !important;
     }
+}
+
+@media (max-width: 480px) {
+    .cat-layers { width: 300px !important; height: 280px !important; min-width: 300px !important; }
+    .matcha-collage { width: 320px !important; height: 300px !important; min-width: 320px !important; }
 }
 
 @media (max-width: 320px) {
@@ -875,7 +876,6 @@
 </head>
 <body>
 
-    <div class="flying-cat"></div>
     <!-- Scene 0: Start Screen -->
     <div class="scene start-screen active first-page-paper" id="scene0">
         <div class="scrapbook-cover">
