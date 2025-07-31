@@ -22,7 +22,7 @@
         }
 
 
-        .start-screen {
+.start-screen {
     text-align: center;
     padding: 40px 20px;
     cursor: pointer;
@@ -275,11 +275,11 @@
 }
 
 .flying-right {
-    animation: flyLeft 6s linear infinite;
+    animation: flyRight 6s linear infinite;
 }
 
 .flying-left {
-    animation: flyRight 6s linear infinite;
+    animation: flying-left 6s linear infinite;
     transform: scaleX(-1);
 }
 
@@ -307,6 +307,21 @@
     }
 }
 
+.flying-cat, .confetti, .paper-crumb {
+    will-change: transform;
+    transform: translateZ(0);
+}
+
+.scene {
+    will-change: opacity, transform;
+}
+
+/* Reduce confetti on mobile */
+@media (max-width: 480px) {
+    .scene {
+        padding: 10px 5px;
+    }
+}
         /* Scene 1: Title card with magazine cutout style */
         .title-card {
             width: 320px;
@@ -644,30 +659,30 @@
         }
 
         /* Mobile responsive */
- @media (max-width: 480px) {
+@media (max-width: 480px) {
     .scrapbook-cover { width: 250px; height: 330px; }
     .cover-title { font-size: 1.8rem; }
     .magazine-title { font-size: 2.2rem; }
     .title-card { width: 280px; }
-    .cat-layers { width: 320px !important; height: 300px !important; min-width: 320px !important; }
-    .capybara-craft { width: 340px !important; padding: 30px 25px !important; min-width: 340px !important; }
-    .matcha-collage { width: 350px !important; height: 320px !important; min-width: 350px !important; }
-    .love-letter { width: 360px !important; padding: 40px 30px !important; min-width: 360px !important; }
+    .cat-layers { width: 280px !important; height: 250px !important; min-width: 280px !important; }
+    .capybara-craft { width: 300px !important; padding: 25px 20px !important; min-width: 300px !important; }
+    .matcha-collage { width: 310px !important; height: 280px !important; min-width: 310px !important; }
+    .love-letter { width: 320px !important; padding: 35px 25px !important; min-width: 320px !important; }
     
-    /* Mobile cat layer adjustments */
-    .cat-layer {
-        padding: 15px 12px;
-        font-size: 1rem;
-    }
-    
+    /* Much smaller cat layers */
     .cat-layer1, .cat-layer2, .cat-layer3 {
-        width: 160px;
-        height: 120px;
+        width: 130px !important;
+        height: 90px !important;
     }
     
-    .cat-layer1 { top: 10px; left: 10px; }
-    .cat-layer2 { top: 60px; left: 60px; }
-    .cat-layer3 { top: 110px; left: 30px; }
+    .cat-layer1 { top: 5px; left: 5px; }
+    .cat-layer2 { top: 45px; left: 45px; }
+    .cat-layer3 { top: 85px; left: 25px; }
+    
+    .cat-layer {
+        padding: 10px 8px !important;
+        font-size: 0.9rem !important;
+    }
 }
 
 @media (max-width: 320px) {
@@ -1162,7 +1177,10 @@ function startScrapbook() {
 
 function createConfetti() {
     const colors = ['#e91e63', '#9c27b0', '#673ab7', '#ff69b4', '#ba68c8'];
-    for (let i = 0; i < 500; i++) {
+    const isMobile = window.innerWidth <= 480;
+    const confettiCount = isMobile ? 200 : 500; // Less on mobile
+    
+    for (let i = 0; i < confettiCount; i++) {
         setTimeout(() => {
             const confetti = document.createElement('div');
             confetti.className = 'confetti';
@@ -1172,7 +1190,7 @@ function createConfetti() {
             document.body.appendChild(confetti);
             
             setTimeout(() => confetti.remove(), 3000);
-        }, i * 100);
+        }, i * (isMobile ? 150 : 100)); // Slower spawn on mobile
     }
 }
 
