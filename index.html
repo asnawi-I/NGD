@@ -350,53 +350,62 @@
         /* Scene 2: Layered paper catsss */
 .cat-layers {
     position: relative;
-    width: 350px !important;
-    height: 480px !important;
+    width: 450px !important;
+    height: 350px !important;
     animation-delay: 0.3s;
     max-width: none !important;
     min-width: 450px !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.cat-layer {
+    position: absolute;
+    background: #fefefe;
+    border-radius: 20px;
+    padding: 25px 20px;
+    text-align: center;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #8B4513;
+    animation: layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+    opacity: 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
 }
 
-        .cat-layer {
-            position: absolute;
-            background: #fefefe;
-            border-radius: 20px;
-            padding: 60px;
-            text-align: center;
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #8B4513;
-            animation: layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-            opacity: 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
+ .cat-layer1 {
+    top: 20px;
+    left: 20px;
+    width: 200px;
+    height: 150px;
+    background: #ffe6f2;
+    animation-delay: 1s;
+    transform: rotate(-3deg);
+    z-index: 3;
+}
 
-        .cat-layer1 {
-            top: 0;
-            left: 0;
-            background: #ffe6f2;
-            animation-delay: 1s;
-            transform: rotate(-3deg);
-            z-index: 3;
-        }
+.cat-layer2 {
+    top: 80px;
+    left: 80px;
+    width: 200px;
+    height: 150px;
+    background: #e6f3ff;
+    animation-delay: 1.3s;
+    transform: rotate(2deg);
+    z-index: 2;
+}
 
-        .cat-layer2 {
-            top: 60px;
-            left: 40px;
-            background: #e6f3ff;
-            animation-delay: 1.3s;
-            transform: rotate(2deg);
-            z-index: 2;
-        }
-
-        .cat-layer3 {
-            top: 120px;
-            left: -20px;
-            background: #f0ffe6;
-            animation-delay: 1.6s;
-            transform: rotate(-1deg);
-            z-index: 1;
-        }
+.cat-layer3 {
+    top: 140px;
+    left: 40px;
+    width: 200px;
+    height: 150px;
+    background: #f0ffe6;
+    animation-delay: 1.6s;
+    transform: rotate(-1deg);
+    z-index: 1;
+}
 
         @keyframes layerPop {
             0% {
@@ -635,27 +644,59 @@
         }
 
         /* Mobile responsive */
-        @media (max-width: 480px) {
-            .scrapbook-cover { width: 250px; height: 330px; }
-            .cover-title { font-size: 1.8rem; }
-            .magazine-title { font-size: 2.2rem; }
-            .title-card { width: 280px; }
-                .cat-layers { width: 380px; height: 380px; }
-    .capybara-craft { width: 400px; }
-    .matcha-collage { width: 420px; height: 400px; }
-    .love-letter { width: 440px; }
-        }
+ @media (max-width: 480px) {
+    .scrapbook-cover { width: 250px; height: 330px; }
+    .cover-title { font-size: 1.8rem; }
+    .magazine-title { font-size: 2.2rem; }
+    .title-card { width: 280px; }
+    .cat-layers { width: 320px !important; height: 300px !important; min-width: 320px !important; }
+    .capybara-craft { width: 340px !important; padding: 30px 25px !important; min-width: 340px !important; }
+    .matcha-collage { width: 350px !important; height: 320px !important; min-width: 350px !important; }
+    .love-letter { width: 360px !important; padding: 40px 30px !important; min-width: 360px !important; }
+    
+    /* Mobile cat layer adjustments */
+    .cat-layer {
+        padding: 15px 12px;
+        font-size: 1rem;
+    }
+    
+    .cat-layer1, .cat-layer2, .cat-layer3 {
+        width: 160px;
+        height: 120px;
+    }
+    
+    .cat-layer1 { top: 10px; left: 10px; }
+    .cat-layer2 { top: 60px; left: 60px; }
+    .cat-layer3 { top: 110px; left: 30px; }
+}
 
-        @media (max-width: 320px) {
-            .scrapbook-cover { width: 220px; height: 300px; }
-            .cover-title { font-size: 1.6rem; }
-            .magazine-title { font-size: 2rem; }
-            .title-card { width: 250px; }
-            .cat-layers { width: 220px; height: 280px; }
-            .capybara-craft { width: 230px; }
-            .matcha-collage { width: 250px; height: 320px; }
-            .love-letter { width: 270px; }
-        }
+@media (max-width: 320px) {
+    .scrapbook-cover { width: 220px; height: 300px; }
+    .cover-title { font-size: 1.6rem; }
+    .magazine-title { font-size: 2rem; }
+    .title-card { width: 250px; }
+    .cat-layers { width: 290px !important; height: 280px !important; min-width: 290px !important; }
+    .capybara-craft { width: 310px !important; padding: 25px 20px !important; min-width: 310px !important; }
+    .matcha-collage { width: 320px !important; height: 300px !important; min-width: 320px !important; }
+    .love-letter { width: 330px !important; padding: 35px 25px !important; min-width: 330px !important; }
+    
+    .cat-layer1, .cat-layer2, .cat-layer3 {
+        width: 140px;
+        height: 100px;
+    }
+    
+    .cat-layer { font-size: 0.9rem; padding: 12px 10px; }
+}
+
+@media (max-width: 480px) {
+    .scene {
+        padding: 15px 5px;
+    }
+    
+    body {
+        overflow-x: hidden;
+    }
+}
 
         /* Craft decorations */
         .washi-tape {
