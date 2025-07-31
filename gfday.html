@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Love Story</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Satisfy&family=Kaushan+Script&family=Permanent+Marker&family=Indie+Flower:wght@400&family=Fredoka+One&family=Righteous&family=Caveat:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Indie Flower', cursive;
+            background: linear-gradient(135deg, #f7f1e3 0%, #e8dcc0 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Image backgrounds - will be loaded dynamically */
+        .cat-pattern-bg {
+            background-image: url('data:image/placeholder');
+            background-size: cover;
+            background-repeat: repeat;
+            background-position: center;
+        }
+
+        .paper-texture-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/placeholder');
+            background-size: cover;
+            background-blend-mode: multiply;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .watercolor-bg {
+            background-image: url('data:image/placeholder');
+            background-size: cover;
+            background-position: center;
+            background-blend-mode: overlay;
+        }
+
+        /* Scene container */
+        .scene {
+    position: absolute;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    padding: 40px 30px;
+}
+
+        .scene.active {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Paper elements base style */
+        .paper-element {
+            background: #fefefe;
+            position: relative;
+            box-shadow: 
+                0 4px 8px rgba(0,0,0,0.1),
+                0 1px 3px rgba(0,0,0,0.08),
+                inset 0 0 20px rgba(139, 69, 19, 0.02);
+        }
+
+        /* Torn paper edges */
+        .torn-top {
+            clip-path: polygon(0% 0%, 5% 2%, 10% 0%, 15% 3%, 20% 1%, 25% 2%, 30% 0%, 35% 3%, 40% 1%, 45% 2%, 50% 0%, 55% 3%, 60% 1%, 65% 2%, 70% 0%, 75% 3%, 80% 1%, 85% 2%, 90% 0%, 95% 3%, 100% 1%, 100% 100%, 0% 100%);
+        }
+
+        .torn-bottom {
+            clip-path: polygon(0% 0%, 100% 0%, 100% 97%, 95% 99%, 90% 97%, 85% 100%, 80% 98%, 75% 99%, 70% 97%, 65% 100%, 60% 98%, 55% 99%, 50% 97%, 45% 100%, 40% 98%, 35% 99%, 30% 97%, 25% 100%, 20% 98%, 15% 99%, 10% 97%, 5% 100%, 0% 98%);
+        }
+
+        .torn-right {
+            clip-path: polygon(0% 0%, 98% 0%, 100% 5%, 98% 10%, 100% 15%, 97% 20%, 100% 25%, 98% 30%, 100% 35%, 97% 40%, 100% 45%, 98% 50%, 100% 55%, 97% 60%, 100% 65%, 98% 70%, 100% 75%, 97% 80%, 100% 85%, 98% 90%, 100% 95%, 97% 100%, 0% 100%);
+        }
+
+        /* Start screen - Paper scrapbook cover */
+        .start-screen {
+            padding: 40px 20px;
+        }
+
+        .scrapbook-cover {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+            border-radius: 15px;
+            position: relative;
+            box-shadow: 
+                0 10px 25px rgba(0,0,0,0.3),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+            animation: bookFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes bookFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(1deg); }
+        }
+
+        .cover-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Kaushan Script', cursive;
+            font-size: 2.2rem;
+            font-weight: 400;
+            color: #f7f1e3;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            line-height: 1.2;
+        }
+
+        .cover-decoration {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border: 3px solid #f7f1e3;
+            border-radius: 50%;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            animation: decorationSpin 8s linear infinite;
+        }
+
+        @keyframes decorationSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tap-cta {
+            margin-top: 40px;
+            padding: 15px 30px;
+            border: 2px solid rgba(139, 69, 19, 0.5);
+            border-radius: 50px;
+            background: rgba(139, 69, 19, 0.1);
+            backdrop-filter: blur(10px);
+            font-size: 1rem;
+            animation: pulseButton 2s ease-in-out infinite;
+            cursor: pointer;
+            color: #8B4513;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tap-cta:hover {
+    background: rgba(233, 30, 99, 0.2);
+    transform: scale(1.15);
+    box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+}
+
+
+/* confetti pop up */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #e91e63;
+    animation: confettiFall 3s linear infinite;
+    pointer-events: none;
+    z-index: 1000;
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+        /* Click instruction */
+        .click-hint {
+            position: fixed;
+            bottom: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.9rem;
+            color: rgba(139, 69, 19, 0.7);
+            opacity: 0.8;
+            z-index: 50;
+            animation: hintFade 3s ease-in-out infinite;
+        }
+
+        @keyframes hintFade {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes instructionPulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Paper fold-out animations */
+        .paper-fold {
+            background: #fefefe;
+            border-radius: 8px;
+            position: relative;
+            transform-origin: center;
+            animation: unfoldPaper 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+        }
+
+        @keyframes unfoldPaper {
+            0% {
+                opacity: 0;
+                transform: perspective(1000px) rotateY(-90deg) scale(0.8);
+            }
+            50% {
+                opacity: 0.7;
+                transform: perspective(1000px) rotateY(-45deg) scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: perspective(1000px) rotateY(0deg) scale(1);
+            }
+        }
+
+
+        .flying-cat {
+    position: fixed;
+    width: 100px;
+    height: 80px;
+    background-image: url('assets/single-images/flying-cat.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    top: 20%;
+    left: -120px;
+    animation: flyAcross 8s linear infinite;
+    z-index: 500;
+    pointer-events: none;
+}
+
+@keyframes flyAcross {
+    0% { 
+        left: -120px; 
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% { 
+        transform: translateY(-20px) rotate(5deg);
+    }
+    100% { 
+        left: 100vw; 
+        transform: translateY(0px) rotate(0deg);
+    }
+}
+
+        /* Scene 1: Title card with magazine cutout style */
+        .title-card {
+            width: 320px;
+            padding: 40px 30px;
+            text-align: center;
+            animation-delay: 0.5s;
+        }
+
+        .magazine-title {
+    font-family: 'Fredoka One', cursive;
+    font-size: 2.8rem;
+    font-weight: 400;
+    color: #e91e63;
+    text-shadow: 3px 3px 0px #9c27b0, 6px 6px 0px #673ab7;
+
+        @keyframes magazinePop {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.05) rotate(1deg); }
+        }
+
+        .subtitle-cutout {
+            font-size: 1.2rem;
+            color: #6f42c1;
+            background: #fff3cd;
+            padding: 10px 15px;
+            border-radius: 15px;
+            display: inline-block;
+            box-shadow: 3px 3px 0px #fd7e14;
+            animation: subtitleWiggle 3s ease-in-out infinite;
+        }
+
+        @keyframes subtitleWiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+        }
+
+        /* Scene 2: Layered paper cats */
+        .cat-layers {
+            position: relative;
+            width: 350px !important;
+            height: 350px;
+            animation-delay: 0.3s;
+        }
+
+        .cat-layer {
+            position: absolute;
+            background: #fefefe;
+            border-radius: 20px;
+            padding: 60px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #8B4513;
+            animation: layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            opacity: 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .cat-layer1 {
+            top: 0;
+            left: 0;
+            background: #ffe6f2;
+            animation-delay: 1s;
+            transform: rotate(-3deg);
+            z-index: 3;
+        }
+
+        .cat-layer2 {
+            top: 60px;
+            left: 40px;
+            background: #e6f3ff;
+            animation-delay: 1.3s;
+            transform: rotate(2deg);
+            z-index: 2;
+        }
+
+        .cat-layer3 {
+            top: 120px;
+            left: -20px;
+            background: #f0ffe6;
+            animation-delay: 1.6s;
+            transform: rotate(-1deg);
+            z-index: 1;
+        }
+
+        @keyframes layerPop {
+            0% {
+                opacity: 0;
+                transform: scale(0.3) rotate(0deg);
+            }
+            70% {
+                transform: scale(1.1) rotate(var(--rotation, 0deg));
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) rotate(var(--rotation, 0deg));
+            }
+        }
+
+        .cat-art {
+            font-size: 3rem;
+            margin: 10px 0;
+            animation: catBounce 2s ease-in-out infinite;
+        }
+
+        @keyframes catBounce {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* Scene 3: Capybara paper craft */
+        .capybara-craft {
+            width: 300px;
+            padding: 40px 40px;
+            text-align: center;
+            background: linear-gradient(135deg, #d4a574 0%, #e8dcc0 100%);
+            animation-delay: 0.4s;
+        }
+
+        .capybara-title {
+            font-family: 'Permanent Marker', cursive;
+            font-size: 2rem;
+            color: #8B4513;
+            margin-bottom: 20px;
+            animation: titleWave 3s ease-in-out infinite;
+        }
+
+        @keyframes titleWave {
+            0%, 100% { transform: scale(1) skewX(0deg); }
+            50% { transform: scale(1.02) skewX(1deg); }
+        }
+
+        .zen-message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #5d4e37;
+            background: rgba(255,255,255,0.7);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            animation: messageFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes messageFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-3px) rotate(0.5deg); }
+        }
+
+        /* Scene 4: Matcha collage */
+        .matcha-collage {
+            width: 320px;
+            height: 380px;
+            position: relative;
+            animation-delay: 0.6s;
+        }
+
+        .matcha-piece {
+            position: absolute;
+            background: #c8e6c9;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            color: #2e7d32;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            opacity: 0;
+        }
+
+        .piece1 {
+            top: 20px;
+            left: 10px;
+            width: 140px;
+            animation-delay: 1.2s;
+            transform: translateX(-100px) rotate(-5deg);
+        }
+
+        .piece2 {
+            top: 80px;
+            right: 20px;
+            width: 160px;
+            background: #fff3e0;
+            color: #e65100;
+            animation-delay: 1.5s;
+            transform: translateX(100px) rotate(3deg);
+        }
+
+        .piece3 {
+            bottom: 60px;
+            left: 20px;
+            width: 180px;
+            background: #f3e5f5;
+            color: #7b1fa2;
+            animation-delay: 1.8s;
+            transform: translateY(100px) rotate(-2deg);
+        }
+
+        .piece4 {
+            bottom: 20px;
+            right: 10px;
+            width: 120px;
+            background: #e8f5e8;
+            color: #388e3c;
+            animation-delay: 2.1s;
+            transform: translateY(100px) rotate(4deg);
+        }
+
+        @keyframes pieceSlide {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0) translateY(0) rotate(var(--final-rotation, 0deg));
+            }
+        }
+
+        /* Scene 5: Final love letter */
+        .love-letter {
+            width: 340px;
+            background: #fefefe;
+            padding: 40px 30px;
+            border-radius: 0;
+            position: relative;
+            animation-delay: 0.7s;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .love-letter::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 20px;
+            background: #ffc107;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .letter-content {
+            font-family: 'Satisfy', cursive;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            color: #8B4513;
+            text-align: center;
+        }
+
+        .signature {
+            margin-top: 30px;
+            font-size: 1.8rem;
+            color: #d63384;
+            animation: signatureDraw 3s ease-in-out infinite;
+        }
+
+        @keyframes signatureDraw {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        /* Navigation dots */
+        .nav-dots {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(139, 69, 19, 0.3);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .dot.active {
+            background: #8B4513;
+            transform: scale(1.2);
+        }
+
+        /* Paper crumbs animation */
+        .paper-crumb {
+            position: fixed;
+            width: 3px;
+            height: 3px;
+            background: #d4a574;
+            border-radius: 50%;
+            opacity: 0.6;
+            animation: crumbFall 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes crumbFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 480px) {
+            .scrapbook-cover { width: 250px; height: 330px; }
+            .cover-title { font-size: 1.8rem; }
+            .magazine-title { font-size: 2.2rem; }
+            .title-card { width: 280px; }
+            .cat-layers { width: 250px; height: 320px; }
+            .capybara-craft { width: 260px; }
+            .matcha-collage { width: 280px; height: 350px; }
+            .love-letter { width: 300px; }
+        }
+
+        @media (max-width: 320px) {
+            .scrapbook-cover { width: 220px; height: 300px; }
+            .cover-title { font-size: 1.6rem; }
+            .magazine-title { font-size: 2rem; }
+            .title-card { width: 250px; }
+            .cat-layers { width: 220px; height: 280px; }
+            .capybara-craft { width: 230px; }
+            .matcha-collage { width: 250px; height: 320px; }
+            .love-letter { width: 270px; }
+        }
+
+        /* Craft decorations */
+        .washi-tape {
+            position: absolute;
+            background: linear-gradient(45deg, #ff6b9d 25%, #c44569 25%, #c44569 50%, #ff6b9d 50%, #ff6b9d 75%, #c44569 75%);
+            background-size: 8px 8px;
+            opacity: 0.8;
+            border-radius: 2px;
+        }
+
+        .washi-vertical {
+            width: 15px;
+            height: 60px;
+            top: 20px;
+            right: -5px;
+            transform: rotate(15deg);
+        }
+
+        .washi-horizontal {
+            width: 80px;
+            height: 12px;
+            bottom: 15px;
+            left: 20px;
+            transform: rotate(-8deg);
+        }
+
+        .paper-clip {
+            position: absolute;
+            width: 20px;
+            height: 35px;
+            border: 2px solid #silver;
+            border-radius: 8px 8px 2px 2px;
+            top: -15px;
+            right: 30px;
+            background: linear-gradient(45deg, #e0e0e0, #f5f5f5);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .paper-clip::before {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 25px;
+            border: 1px solid #bbb;
+            border-radius: 6px 6px 1px 1px;
+            top: 3px;
+            left: 2px;
+            background: transparent;
+        }
+
+        .sticker {
+            position: absolute;
+            font-size: 1.5rem;
+            animation: stickerBounce 3s ease-in-out infinite;
+        }
+
+        @keyframes stickerBounce {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .heart-sticker { 
+            color: #ff6b9d; 
+            top: 15px; 
+            left: 15px;
+            animation-delay: 0s;
+        }
+
+        .star-sticker { 
+            color: #ffc107; 
+            bottom: 20px; 
+            right: 20px;
+            animation-delay: 1s;
+        }
+
+        .flower-sticker { 
+            color: #7bed9f; 
+            top: 50%; 
+            right: 10px;
+            animation-delay: 2s;
+        }
+
+        /* CSS-drawn cute elements */
+        .css-cat {
+            position: relative;
+            display: inline-block;
+            margin: 10px;
+        }
+
+        .css-cat::before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background: #ff6b9d;
+            border-radius: 50% 50% 20px 20px;
+            top: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .css-cat::after {
+            content: '• •';
+            position: absolute;
+            top: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            color: #333;
+            letter-spacing: 8px;
+        }
+
+        .css-matcha-cup {
+            position: relative;
+            display: inline-block;
+            width: 30px;
+            height: 25px;
+            background: linear-gradient(135deg, #7fb069, #8bc34a);
+            border-radius: 0 0 15px 15px;
+            margin: 10px;
+        }
+
+        .css-matcha-cup::before {
+            content: '';
+            position: absolute;
+            width: 35px;
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 50%;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .css-matcha-cup::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            border: 2px solid #7fb069;
+            border-left: none;
+            border-radius: 0 8px 8px 0;
+            right: -8px;
+            top: 8px;
+        }
+
+        .doodle-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid transparent;
+            border-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,0 Q25,5 50,0 T100,0 L100,10 Q75,15 50,10 T0,10 Z' fill='%23ff6b9d'/%3E%3C/svg%3E") 2;
+            border-radius: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="flying-cat"></div>
+    <!-- Scene 0: Start Screen -->
+    <div class="scene start-screen active first-page-paper" id="scene0">
+        <div class="scrapbook-cover">
+            <div class="cover-title">Love<br>Scrapbook<br>For You</div>
+            <div class="cover-decoration">
+                <div class="heart-sticker-img"></div>
+            </div>
+            <div class="character-image"></div>
+            <div class="paper-texture-overlay"></div>
+        </div>
+        <div class="tap-cta">Click to open the scrapbook</div>
+    </div>
+
+    <!-- Scene 1: Title Page -->
+    <div class="scene watercolor-bg" id="scene1">
+        <div class="paper-fold paper-element torn-top title-card">
+            <div class="paper-texture-overlay"></div>
+            <div class="magazine-title">HAPPY<br>NATIONAL<br>GIRLFRIEND<br>DAY!!! <3</div>
+            <div class="subtitle-cutout">Made with love just for you</div>
+            <div class="washi-tape washi-vertical"></div>
+            <div class="sticker heart-sticker">
+                <div class="heart-sticker-img"></div>
+            </div>
+            <div class="sticker star-sticker">
+                <div class="star-sticker-img"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 2: Cat Layers -->
+    <div class="scene watercolor-bg" id="scene2">
+        <div class="paper-fold paper-element cat-layers">
+            <div class="paper-texture-overlay"></div>
+            <div class="cat-layer cat-layer1 torn-right" style="--rotation: -3deg;">
+                <div class="cat-art">
+                    <div class="cat-image"></div>
+                </div>
+                <div>You're as graceful<br>as a kitten</div>
+            </div>
+            <div class="cat-layer cat-layer2 torn-top" style="--rotation: 2deg;">
+                <div class="cat-art">
+                    <div class="cat-image"></div>
+                </div>
+                <div>And as curious<br>about the world</div>
+            </div>
+            <div class="cat-layer cat-layer3 torn-bottom" style="--rotation: -1deg;">
+                <div class="cat-art">
+                    <div class="cat-image"></div>
+                </div>
+                <div>Your purr is my<br>favorite sound</div>
+            </div>
+            <div class="paper-clip"></div>
+            <div class="sticker flower-sticker">
+                <div class="heart-sticker-img"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 3: Capybara Zen -->
+    <div class="scene watercolor-bg" id="scene3">
+        <div class="paper-fold paper-element torn-top capybara-craft">
+            <div class="paper-texture-overlay"></div>
+            <div class="capybara-title">Zen Like A Capybara</div>
+            <div class="zen-message">
+                Just like how capybaras find peace in warm water,
+                I find my calm in your presence.
+                <br><br>
+                You bring serenity to my chaotic world
+                and make everything feel perfectly balanced.
+            </div>
+            <div class="capybara-image"></div>
+            <div style="font-size: 1.2rem; margin-top: 10px; color: #5d4e37;">
+                peaceful vibes
+            </div>
+            <div class="washi-tape washi-horizontal" style="background: linear-gradient(45deg, #7bed9f 25%, #4ecdc4 25%, #4ecdc4 50%, #7bed9f 50%, #7bed9f 75%, #4ecdc4 75%);"></div>
+            <div class="sticker heart-sticker" style="top: auto; bottom: 15px; left: auto; right: 15px;">
+                <div class="heart-sticker-img"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scene 4: Matcha Collage -->
+    <div class="scene watercolor-bg" id="scene4">
+        <div class="paper-fold paper-element matcha-collage">
+            <div class="paper-texture-overlay"></div>
+            <div class="matcha-piece piece1 torn-right" style="--final-rotation: -5deg;">
+                <div class="matcha-image"></div>
+                <strong>Sweet like matcha:</strong><br>
+                Every moment with you
+            </div>
+            <div class="matcha-piece piece2 torn-bottom" style="--final-rotation: 3deg;">
+                <div class="matcha-image"></div>
+                <strong>Warm like tea:</strong><br>
+                Your hugs on cold days
+            </div>
+            <div class="matcha-piece piece3 torn-top" style="--final-rotation: -2deg;">
+                <div class="matcha-image"></div>
+                <strong>Perfect blend:</strong><br>
+                You and me together
+            </div>
+            <div class="matcha-piece piece4 torn-right" style="--final-rotation: 4deg;">
+                <div class="matcha-image"></div>
+                <strong>Daily ritual:</strong><br>
+                Loving you more
+            </div>
+            <div class="sticker star-sticker" style="top: 50%; right: auto; left: 10px;">
+                <div class="star-sticker-img"></div>
+            </div>
+            <div class="washi-tape washi-vertical" style="background: linear-gradient(45deg, #7fb069 25%, #8bc34a 25%, #8bc34a 50%, #7fb069 50%, #7fb069 75%, #8bc34a 75%); left: -5px;"></div>
+        </div>
+    </div>
+
+    <!-- Scene 5: Love Letter -->
+    <div class="scene watercolor-bg" id="scene5">
+        <div class="paper-fold paper-element love-letter">
+            <div class="paper-texture-overlay" style="opacity: 0.2;"></div>
+            <div class="letter-content">
+                My dearest love,
+                <br><br>
+                Like cats, capybaras, and matcha tea,
+                you bring joy to the simplest moments.
+                <br><br>
+                Thank you for being my favorite person,
+                my daily dose of happiness,
+                and my forever adventure.
+                <br><br>
+                Here's to many more days of love,
+                laughter, and sharing all our
+                favorite things together.
+            </div>
+            <div class="signature">
+                With all my love 
+                <div class="heart-sticker-img" style="display: inline-block; width: 20px; height: 20px; margin-left: 5px;"></div>
+            </div>
+            <div class="washi-tape washi-horizontal" style="background: linear-gradient(45deg, #ff6b9d 25%, #c44569 25%, #c44569 50%, #ff6b9d 50%, #ff6b9d 75%, #c44569 75%); bottom: auto; top: 20px; right: 20px; width: 60px;"></div>
+            <div class="sticker heart-sticker" style="bottom: 30px; right: 30px;">
+                <div class="heart-sticker-img"></div>
+            </div>
+            <div class="sticker star-sticker" style="top: 15px; left: 15px; bottom: auto; right: auto;">
+                <div class="star-sticker-img"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation dots -->
+    <div class="nav-dots">
+        <div class="dot active" data-scene="0"></div>
+        <div class="dot" data-scene="1"></div>
+        <div class="dot" data-scene="2"></div>
+        <div class="dot" data-scene="3"></div>
+        <div class="dot" data-scene="4"></div>
+        <div class="dot" data-scene="5"></div>
+    </div>
+
+    <!-- Click hint -->
+    <div class="click-hint" id="clickHint" style="display: none;">TAP TAP :) →</div>
+
+    <!-- Paper crumbs -->
+    <div id="crumbContainer"></div>
+
+    <script>
+        let currentScene = 0;
+        const totalScenes = 6;
+        let autoProgress = null;
+
+        // Load images from organized folders
+        async function loadImages() {
+            try {
+                // Background images
+                const catPatternUrl = 'assets/background-images/cat-illustration.jpg';
+                const paperTextureUrl = 'assets/background-images/paper-texture.jpg';
+                const watercolorUrl = 'assets/background-images/watercolour-background.jpg';
+                const firstPagePaperUrl = 'assets/background-images/paper-background.jpg';
+
+                
+                // Single element images
+                const capybaraUrl = 'assets/single-images/capybara.png';
+                const matchaUrl = 'assets/single-images/matcha.png';
+                const heartStickerUrl = 'assets/single-images/heart.png';
+                const starStickerUrl = 'assets/single-images/star.png';
+                const characterUrl = 'assets/single-images/character.png';
+                const catUrl = 'assets/single-images/cat.png';
+                
+                // Apply images to CSS
+                const style = document.createElement('style');
+                style.textContent = `
+                    .cat-pattern-bg {
+                        background-image: url('${catPatternUrl}') !important;
+                    }
+                    .paper-texture-overlay {
+                        background-image: url('${paperTextureUrl}') !important;
+                    }
+                    .watercolor-bg {
+                        background-image: url('${watercolorUrl}') !important;
+                    }
+
+                    .first-page-paper {
+    background-image: url('${firstPagePaperUrl}') !important;
+    background-size: cover;
+    background-position: center;
+}
+                    
+                    /* Single element replacements */
+                    .capybara-image {
+                        background-image: url('${capybaraUrl}');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 120px;
+                        height: 120px;
+                        margin: 15px auto;
+                    }
+                    
+                    .matcha-image {
+                        background-image: url('${matchaUrl}');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 60px;
+                        height: 60px;
+                        margin: 10px auto;
+                    }
+                    
+                    .heart-sticker-img {
+                        background-image: url('${heartStickerUrl}');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 30px;
+                        height: 30px;
+                    }
+                    
+                    .star-sticker-img {
+                        background-image: url('${starStickerUrl}');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 30px;
+                        height: 30px;
+                    }
+                    
+                    .character-image {
+                        background-image: url('${characterUrl}');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 80px;
+                        height: 80px;
+                        margin: 20px auto;
+                    }
+                    
+                    .cat-image {
+                        background-image: url('${catUrl}');
+                        background-size: contain;
+                        background-repeat: no-repeat;
+                        background-position: center;
+                        width: 60px;
+                        height: 60px;
+                        margin: 10px auto;
+                    }
+                `;
+                document.head.appendChild(style);
+                
+            } catch (error) {
+                console.log('Using default styling - place images in assets folders');
+            }
+        }
+
+        // Load images when page loads
+        window.addEventListener('load', loadImages);
+
+        // Start the experience - both click and touch
+        document.getElementById('scene0').addEventListener('click', startScrapbook);
+        document.getElementById('scene0').addEventListener('touchstart', startScrapbook);
+
+function startScrapbook() {
+    nextScene();
+    createPaperCrumbs();
+    createConfetti();
+    // Show click hint after first page
+    setTimeout(() => {
+        document.getElementById('clickHint').style.display = 'block';
+    }, 2000);
+}
+
+function createConfetti() {
+    const colors = ['#e91e63', '#9c27b0', '#673ab7', '#ff69b4', '#ba68c8'];
+    for (let i = 0; i < 500; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 3000);
+        }, i * 100);
+    }
+}
+
+        function nextScene() {
+            // Hide current scene
+            document.querySelectorAll('.scene').forEach(scene => {
+                scene.classList.remove('active');
+            });
+
+            // Update navigation dots
+            document.querySelectorAll('.dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentScene);
+            });
+
+            // Show next scene
+            currentScene = (currentScene + 1) % totalScenes;
+            document.getElementById(`scene${currentScene}`).classList.add('active');
+
+            // Restart animations for complex scenes
+            if (currentScene === 2) {
+                // Reset cat layer animations
+                document.querySelectorAll('.cat-layer').forEach((layer, index) => {
+                    layer.style.animation = 'none';
+                    setTimeout(() => {
+                        layer.style.animation = `layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards`;
+                        layer.style.animationDelay = `${1 + index * 0.3}s`;
+                    }, 100);
+                });
+            }
+
+            if (currentScene === 4) {
+                // Reset matcha collage animations
+                document.querySelectorAll('.matcha-piece').forEach((piece, index) => {
+                    piece.style.animation = 'none';
+                    setTimeout(() => {
+                        piece.style.animation = `pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                        piece.style.animationDelay = `${1.2 + index * 0.3}s`;
+                    }, 100);
+                });
+            }
+
+            // Loop back to start after final scene
+            if (currentScene === 0) {
+                // Back to beginning - hide click hint
+                document.getElementById('clickHint').style.display = 'none';
+            }
+        }
+
+        // Manual navigation - both click and touch
+        document.querySelectorAll('.dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                currentScene = index - 1;
+                nextScene();
+            });
+            dot.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                currentScene = index - 1;
+                nextScene();
+            });
+        });
+
+        // Desktop click anywhere to advance
+        document.addEventListener('click', (e) => {
+            if (e.target.id !== 'scene0' && !e.target.classList.contains('dot') && currentScene > 0) {
+                nextScene();
+            }
+        });
+
+        // Paper crumbs effect
+        function createPaperCrumbs() {
+            const container = document.getElementById('crumbContainer');
+            
+            setInterval(() => {
+                if (Math.random() < 0.4) {
+                    const crumb = document.createElement('div');
+                    crumb.className = 'paper-crumb';
+                    crumb.style.left = Math.random() * 100 + '%';
+                    crumb.style.animationDelay = '0s';
+                    crumb.style.animationDuration = `${6 + Math.random() * 4}s`;
+                    
+                    const colors = ['#d4a574', '#e8dcc0', '#8B4513', '#f7f1e3'];
+                    crumb.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    
+                    container.appendChild(crumb);
+                    
+                    setTimeout(() => {
+                        crumb.remove();
+                    }, 10000);
+                }
+            }, 1000);
+        }
+
+        // Touch/swipe support for mobile
+        let startY = 0;
+        let startX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            startY = e.touches[0].clientY;
+            startX = e.touches[0].clientX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            const endY = e.changedTouches[0].clientY;
+            const endX = e.changedTouches[0].clientX;
+            const diffY = startY - endY;
+            const diffX = startX - endX;
+
+            // Swipe up or tap to advance
+            if (Math.abs(diffY) > Math.abs(diffX) && diffY > 30) {
+                if (currentScene > 0) {
+                    nextScene();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
