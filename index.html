@@ -261,7 +261,7 @@
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
-    z-index: 500;
+    z-index: 1500;
     pointer-events: none;
 }
 
@@ -277,28 +277,24 @@
 @keyframes flyRight {
     0% { 
         left: -120px; 
-        transform: translateY(0px) rotate(0deg);
-    }
-    50% { 
-        transform: translateY(-15px) rotate(3deg);
+        top: var(--fly-top);
     }
     100% { 
-        left: 100vw; 
-        transform: translateY(0px) rotate(0deg);
+        left: calc(100vw + 120px); 
+        top: var(--fly-top);
     }
 }
 
 @keyframes flyLeft {
     0% { 
         right: -120px; 
-        transform: scaleX(-1) translateY(0px) rotate(0deg);
-    }
-    50% { 
-        transform: scaleX(-1) translateY(-15px) rotate(-3deg);
+        top: var(--fly-top);
+        transform: scaleX(-1);
     }
     100% { 
-        right: 100vw; 
-        transform: scaleX(-1) translateY(0px) rotate(0deg);
+        right: calc(100vw + 120px); 
+        top: var(--fly-top);
+        transform: scaleX(-1);
     }
 }
 
@@ -342,7 +338,7 @@
         /* Scene 2: Layered paper catsss */
         .cat-layers {
             position: relative;
-            width: 350px !important;
+            width: 450px !important;
             height: 350px;
             animation-delay: 0.3s;
         }
@@ -415,7 +411,7 @@
 
         /* Scene 3: Capybara paper craft */
         .capybara-craft {
-            width: 300px;
+            width: 480px !important;
             padding: 40px 40px;
             text-align: center;
             background: linear-gradient(135deg, #d4a574 0%, #e8dcc0 100%);
@@ -454,7 +450,7 @@
 
         /* Scene 4: Matcha collage */
         .matcha-collage {
-            width: 320px;
+            width: 500px !important;
             height: 380px;
             position: relative;
             animation-delay: 0.6s;
@@ -522,7 +518,7 @@
 
         /* Scene 5: Final love letter */
         .love-letter {
-            width: 340px;
+            width: 520px !important;
             background: #fefefe;
             padding: 40px 30px;
             border-radius: 0;
@@ -624,10 +620,10 @@
             .cover-title { font-size: 1.8rem; }
             .magazine-title { font-size: 2.2rem; }
             .title-card { width: 280px; }
-            .cat-layers { width: 250px; height: 320px; }
-            .capybara-craft { width: 260px; }
-            .matcha-collage { width: 280px; height: 350px; }
-            .love-letter { width: 300px; }
+                .cat-layers { width: 380px; height: 380px; }
+    .capybara-craft { width: 400px; }
+    .matcha-collage { width: 420px; height: 400px; }
+    .love-letter { width: 440px; }
         }
 
         @media (max-width: 320px) {
@@ -1243,7 +1239,8 @@ document.addEventListener('touchend', (e) => {
         if (Math.random() < 0.3) {
             const cat = document.createElement('div');
             cat.className = 'flying-cat';
-            cat.style.top = Math.random() * 60 + 10 + '%';
+            const flyTop = Math.random() * 60 + 10 + '%';
+            cat.style.setProperty('--fly-top', flyTop);
             
             if (Math.random() > 0.5) {
                 cat.classList.add('flying-right');
@@ -1254,10 +1251,12 @@ document.addEventListener('touchend', (e) => {
             document.body.appendChild(cat);
             
             setTimeout(() => {
-                cat.remove();
-            }, 6000);
+                if (cat.parentNode) {  /* PREVENT STUCK CATS */
+                    cat.remove();
+                }
+            }, 8000);  /* LONGER CLEANUP TIME */
         }
-    }, 2000);
+    }, 3000);  /* LESS FREQUENT */
 }
     </script>
 </body>
