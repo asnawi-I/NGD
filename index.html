@@ -16,7 +16,7 @@
 body {
     font-family: 'Indie Flower', cursive;
     background: linear-gradient(135deg, #f7f1e3 0%, #e8dcc0 100%);
-    min-height: 100vh;
+    min-height: 90vh;
     overflow-x: hidden;
     position: relative;
 }
@@ -557,18 +557,6 @@ body {
     transform: scale(1.2);
 }
 
-/* Click hint */
-.click-hint {
-    position: fixed;
-    bottom: 70px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 0.9rem;
-    color: rgba(139, 69, 19, 0.7);
-    opacity: 0.8;
-    z-index: 50;
-    animation: hintFade 3s ease-in-out infinite;
-}
 
 @keyframes hintFade {
     0%, 100% { opacity: 0.5; }
@@ -801,20 +789,20 @@ body {
     <div class="scene watercolor-bg" id="scene4">
         <div class="paper-fold paper-element matcha-collage">
             <div class="paper-texture-overlay"></div>
-            <div class="matcha-piece piece1 torn-right" style="--final-rotation: -5deg;">
+            <div class="matcha-piece piece1 torn-right" style="--final-rotation: 4deg;">
                 <div class="matcha-image"></div>
-                <strong>Sweet like matcha:</strong><br>
-                Every moment with you
+                <strong>Daily ritual:</strong><br>
+                Loving you more
             </div>
-            <div class="matcha-piece piece2 torn-bottom" style="--final-rotation: 3deg;">
+            <div class="matcha-piece piece2 torn-right" style="--final-rotation: 4deg;">
                 <div class="matcha-image"></div>
-                <strong>Warm like tea:</strong><br>
-                Your hugs on cold days
+                <strong>Daily ritual:</strong><br>
+                Loving you more
             </div>
-            <div class="matcha-piece piece3 torn-top" style="--final-rotation: -2deg;">
+            <div class="matcha-piece piece3 torn-right" style="--final-rotation: 4deg;">
                 <div class="matcha-image"></div>
-                <strong>Perfect blend:</strong><br>
-                You and me together
+                <strong>Daily ritual:</strong><br>
+                Loving you more
             </div>
             <div class="matcha-piece piece4 torn-right" style="--final-rotation: 4deg;">
                 <div class="matcha-image"></div>
@@ -870,8 +858,6 @@ body {
         <div class="dot" data-scene="5"></div>
     </div>
 
-    <!-- Click hint -->
-    <div class="click-hint" id="clickHint" style="display: none;">TAP TAP :) →</div>
 
     <!-- Paper crumbs -->
     <div id="crumbContainer"></div>
