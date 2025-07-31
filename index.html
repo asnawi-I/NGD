@@ -22,18 +22,6 @@
         }
 
 
-.start-screen {
-    text-align: center;
-    padding: 40px 20px;
-    cursor: pointer;
-    width: 100%;
-    height: 100%;
-    position: relative;
-}
-
-.start-screen * {
-    pointer-events: none;  /* Make child elements not block clicks */
-}
 
 .start-screen .tap-cta {
     pointer-events: auto;  /* Keep button clickable too */
@@ -670,13 +658,13 @@
     
     /* Much smaller cat layers */
     .cat-layer1, .cat-layer2, .cat-layer3 {
-        width: 130px !important;
-        height: 90px !important;
+        width: 100px !important;
+        height: 250px !important;
     }
     
     .cat-layer1 { top: 5px; left: 5px; }
-    .cat-layer2 { top: 45px; left: 45px; }
-    .cat-layer3 { top: 85px; left: 25px; }
+    .cat-layer2 { top: 45px; left: 75px; }
+    .cat-layer3 { top: 100px; left: 5px; }
     
     .cat-layer {
         padding: 10px 8px !important;
@@ -877,7 +865,7 @@
 <body>
 
     <!-- Scene 0: Start Screen -->
-    <div class="scene start-screen active first-page-paper" id="scene0">
+    <div class="first-page-paper" id="scene0">
         <div class="scrapbook-cover">
             <div class="cover-title">Love<br>Scrapbook<br>For You</div>
             <div class="cover-decoration">
