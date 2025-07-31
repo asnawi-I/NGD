@@ -173,21 +173,24 @@
             100% { transform: rotate(360deg); }
         }
 
-        .tap-cta {
-            margin-top: 40px;
-            padding: 20px 40px;
-            border: 2px solid rgba(139, 69, 19, 0.5);
-            border-radius: 50px;
-            background: rgba(139, 69, 19, 0.1);
-            backdrop-filter: blur(10px);
-            font-size: 1.1rem;
-            animation: pulseButton 2s ease-in-out infinite;
-            cursor: pointer;
-            color: #8B4513;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            touch-action: manipulation;
-        }
+.tap-cta {
+    margin-top: 40px;
+    padding: 20px 40px;
+    border: 2px solid rgba(139, 69, 19, 0.5);
+    border-radius: 50px;
+    background: rgba(139, 69, 19, 0.1);
+    backdrop-filter: blur(10px);
+    font-size: 1.1rem;
+    animation: pulseButton 2s ease-in-out infinite;
+    cursor: default;
+    color: #8B4513;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    touch-action: manipulation;
+}
+.start-screen, .start-screen * {
+    cursor: default !important;
+}
 
         .tap-cta:hover {
     background: rgba(233, 30, 99, 0.2);
