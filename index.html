@@ -5,57 +5,63 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paper Love Story</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Satisfy&family=Kaushan+Script&family=Permanent+Marker&family=Indie+Flower:wght@400&family=Fredoka+One&family=Righteous&family=Caveat:wght@400;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+@import url('https://fonts.googleapis.com/css2?family=Satisfy&family=Kaushan+Script&family=Permanent+Marker&family=Indie+Flower:wght@400&family=Fredoka+One&family=Righteous&family=Caveat:wght@400;600;700&display=swap');
 
-        body {
-            font-family: 'Indie Flower', cursive;
-            background: linear-gradient(135deg, #f7f1e3 0%, #e8dcc0 100%);
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-
-
-.start-screen .tap-cta {
-    pointer-events: auto;  /* Keep button clickable too */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-        /* Image backgrounds - will be loaded dynamically */
-        .cat-pattern-bg {
-            background-image: url('data:image/placeholder');
-            background-size: cover;
-            background-repeat: repeat;
-            background-position: center;
-        }
+body {
+    font-family: 'Indie Flower', cursive;
+    background: linear-gradient(135deg, #f7f1e3 0%, #e8dcc0 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+}
 
-        .paper-texture-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: url('data:image/placeholder');
-            background-size: cover;
-            background-blend-mode: multiply;
-            opacity: 0.3;
-            pointer-events: none;
-        }
+/* Start screen fixes */
+.start-screen {
+    text-align: center;
+    padding: 40px 20px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    cursor: default !important;
+}
 
-        .watercolor-bg {
-            background-image: url('data:image/placeholder');
-            background-size: cover;
-            background-position: center;
-            background-blend-mode: overlay;
-        }
+.start-screen * {
+    pointer-events: none !important;
+}
 
-        /* Scene container */
+.start-screen .scrapbook-cover,
+.start-screen .tap-cta {
+    pointer-events: auto;
+}
+
+/* Image backgrounds */
+.watercolor-bg {
+    background-image: url('data:image/placeholder');
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+}
+
+.paper-texture-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/placeholder');
+    background-size: cover;
+    background-blend-mode: multiply;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+/* Scene container */
 .scene {
     position: absolute;
     width: 100%;
@@ -67,99 +73,113 @@
     opacity: 0;
     transform: scale(0.8);
     transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    padding: 20px 10px;  
-    overflow: visible;   
-}
-        .scene.active {
-            opacity: 1;
-            transform: scale(1);
-        }
-
-        .text-scene {
     padding: 20px 10px;
-    text-align: center;
-    max-width: 95%;
-    width: auto;
+    overflow: visible;
 }
 
-        /* Paper elements base style */
-        .paper-element {
-            background: #fefefe;
-            position: relative;
-            box-shadow: 
-                0 4px 8px rgba(0,0,0,0.1),
-                0 1px 3px rgba(0,0,0,0.08),
-                inset 0 0 20px rgba(139, 69, 19, 0.02);
-        }
+.scene.active {
+    opacity: 1;
+    transform: scale(1);
+}
 
-        /* Torn paper edges */
-        .torn-top {
-            clip-path: polygon(0% 0%, 5% 2%, 10% 0%, 15% 3%, 20% 1%, 25% 2%, 30% 0%, 35% 3%, 40% 1%, 45% 2%, 50% 0%, 55% 3%, 60% 1%, 65% 2%, 70% 0%, 75% 3%, 80% 1%, 85% 2%, 90% 0%, 95% 3%, 100% 1%, 100% 100%, 0% 100%);
-        }
+/* Paper elements */
+.paper-element {
+    background: #fefefe;
+    position: relative;
+    box-shadow: 
+        0 4px 8px rgba(0,0,0,0.1),
+        0 1px 3px rgba(0,0,0,0.08),
+        inset 0 0 20px rgba(139, 69, 19, 0.02);
+}
 
-        .torn-bottom {
-            clip-path: polygon(0% 0%, 100% 0%, 100% 97%, 95% 99%, 90% 97%, 85% 100%, 80% 98%, 75% 99%, 70% 97%, 65% 100%, 60% 98%, 55% 99%, 50% 97%, 45% 100%, 40% 98%, 35% 99%, 30% 97%, 25% 100%, 20% 98%, 15% 99%, 10% 97%, 5% 100%, 0% 98%);
-        }
+.paper-fold {
+    background: #fefefe;
+    border-radius: 8px;
+    position: relative;
+    transform-origin: center;
+    animation: unfoldPaper 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+    opacity: 1;
+}
 
-        .torn-right {
-            clip-path: polygon(0% 0%, 98% 0%, 100% 5%, 98% 10%, 100% 15%, 97% 20%, 100% 25%, 98% 30%, 100% 35%, 97% 40%, 100% 45%, 98% 50%, 100% 55%, 97% 60%, 100% 65%, 98% 70%, 100% 75%, 97% 80%, 100% 85%, 98% 90%, 100% 95%, 97% 100%, 0% 100%);
-        }
+@keyframes unfoldPaper {
+    0% {
+        opacity: 0;
+        transform: perspective(1000px) rotateY(-90deg) scale(0.8);
+    }
+    50% {
+        opacity: 0.7;
+        transform: perspective(1000px) rotateY(-45deg) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: perspective(1000px) rotateY(0deg) scale(1);
+    }
+}
 
-        /* Start screen - Paper scrapbook cover */
-        .start-screen {
-            padding: 40px 20px;
-        }
+/* Torn paper edges */
+.torn-top {
+    clip-path: polygon(0% 0%, 5% 2%, 10% 0%, 15% 3%, 20% 1%, 25% 2%, 30% 0%, 35% 3%, 40% 1%, 45% 2%, 50% 0%, 55% 3%, 60% 1%, 65% 2%, 70% 0%, 75% 3%, 80% 1%, 85% 2%, 90% 0%, 95% 3%, 100% 1%, 100% 100%, 0% 100%);
+}
 
-        .scrapbook-cover {
-            width: 300px;
-            height: 400px;
-            background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
-            border-radius: 15px;
-            position: relative;
-            box-shadow: 
-                0 10px 25px rgba(0,0,0,0.3),
-                inset 0 1px 0 rgba(255,255,255,0.2);
-            animation: bookFloat 4s ease-in-out infinite;
-        }
+.torn-bottom {
+    clip-path: polygon(0% 0%, 100% 0%, 100% 97%, 95% 99%, 90% 97%, 85% 100%, 80% 98%, 75% 99%, 70% 97%, 65% 100%, 60% 98%, 55% 99%, 50% 97%, 45% 100%, 40% 98%, 35% 99%, 30% 97%, 25% 100%, 20% 98%, 15% 99%, 10% 97%, 5% 100%, 0% 98%);
+}
 
-        @keyframes bookFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(1deg); }
-        }
+.torn-right {
+    clip-path: polygon(0% 0%, 98% 0%, 100% 5%, 98% 10%, 100% 15%, 97% 20%, 100% 25%, 98% 30%, 100% 35%, 97% 40%, 100% 45%, 98% 50%, 100% 55%, 97% 60%, 100% 65%, 98% 70%, 100% 75%, 97% 80%, 100% 85%, 98% 90%, 100% 95%, 97% 100%, 0% 100%);
+}
 
-        .cover-title {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-family: 'Kaushan Script', cursive;
-            font-size: 2.2rem;
-            font-weight: 400;
-            color: #f7f1e3;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-            line-height: 1.2;
-        }
+/* Scrapbook cover */
+.scrapbook-cover {
+    width: 300px;
+    height: 400px;
+    background: linear-gradient(135deg, #8B4513 0%, #A0522D 100%);
+    border-radius: 15px;
+    position: relative;
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+    animation: bookFloat 4s ease-in-out infinite;
+}
 
-        .cover-decoration {
-            position: absolute;
-            width: 60px;
-            height: 60px;
-            border: 3px solid #f7f1e3;
-            border-radius: 50%;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            animation: decorationSpin 8s linear infinite;
-        }
+@keyframes bookFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(1deg); }
+}
 
-        @keyframes decorationSpin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+.cover-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Kaushan Script', cursive;
+    font-size: 2.2rem;
+    font-weight: 400;
+    color: #f7f1e3;
+    text-align: center;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 1.2;
+}
+
+.cover-decoration {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 3px solid #f7f1e3;
+    border-radius: 50%;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    animation: decorationSpin 8s linear infinite;
+}
+
+@keyframes decorationSpin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
 
 .tap-cta {
     margin-top: 40px;
@@ -169,25 +189,21 @@
     background: rgba(139, 69, 19, 0.1);
     backdrop-filter: blur(10px);
     font-size: 1.1rem;
-    animation: pulseButton 2s ease-in-out infinite;
     cursor: default;
     color: #8B4513;
     font-weight: 600;
     transition: all 0.3s ease;
     touch-action: manipulation;
 }
-.start-screen, .start-screen * {
-    cursor: default !important;
-}
 
-        .tap-cta:hover {
+
+.tap-cta:hover {
     background: rgba(233, 30, 99, 0.2);
     transform: scale(1.15);
     box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
 }
 
-
-/* confetti pop up */
+/* Confetti */
 .confetti {
     position: fixed;
     width: 10px;
@@ -202,58 +218,9 @@
     0% { transform: translateY(-100vh) rotate(0deg); opacity: 1; }
     100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
 }
-        /* Click instruction */
-        .click-hint {
-            position: fixed;
-            bottom: 70px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.9rem;
-            color: rgba(139, 69, 19, 0.7);
-            opacity: 0.8;
-            z-index: 50;
-            animation: hintFade 3s ease-in-out infinite;
-        }
 
-        @keyframes hintFade {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        @keyframes instructionPulse {
-            0%, 100% { opacity: 0.7; }
-            50% { opacity: 1; }
-        }
-
-        /* Paper fold-out animations */
-.paper-fold {
-    background: #fefefe;
-    border-radius: 8px;
-    position: relative;
-    transform-origin: center;
-    animation: unfoldPaper 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-    opacity: 0;
-    max-width: none !important;
-    overflow: visible !important;
-}
-
-        @keyframes unfoldPaper {
-            0% {
-                opacity: 0;
-                transform: perspective(1000px) rotateY(-90deg) scale(0.8);
-            }
-            50% {
-                opacity: 0.7;
-                transform: perspective(1000px) rotateY(-45deg) scale(0.9);
-            }
-            100% {
-                opacity: 1;
-                transform: perspective(1000px) rotateY(0deg) scale(1);
-            }
-        }
-
-/* flying cat */
-        .flying-cat {
+/* Flying cats */
+.flying-cat {
     position: fixed;
     width: 100px;
     height: 80px;
@@ -270,8 +237,7 @@
 }
 
 .flying-left {
-    animation: flying-left 6s linear infinite;
-    transform: scaleX(-1);
+    animation: flyLeft 6s linear infinite;
 }
 
 @keyframes flyRight {
@@ -298,28 +264,13 @@
     }
 }
 
-.flying-cat, .confetti, .paper-crumb {
-    will-change: transform;
-    transform: translateZ(0);
+/* Title card */
+.title-card {
+    width: 320px;
+    padding: 40px 30px;
+    text-align: center;
+    animation-delay: 0.5s;
 }
-
-.scene {
-    will-change: opacity, transform;
-}
-
-/* Reduce confetti on mobile */
-@media (max-width: 480px) {
-    .scene {
-        padding: 10px 5px;
-    }
-}
-        /* Scene 1: Title card with magazine cutout style */
-        .title-card {
-            width: 320px;
-            padding: 40px 30px;
-            text-align: center;
-            animation-delay: 0.5s;
-        }
 
 .magazine-title {
     font-family: 'Fredoka One', cursive;
@@ -329,62 +280,35 @@
     text-shadow: 3px 3px 0px #9c27b0, 6px 6px 0px #673ab7;
     line-height: 0.9;
     margin-bottom: 20px;
-    animation: magazinePop 2s ease-out infinite;
 }
 
-       .subtitle-cutout {
-            font-size: 1.2rem;
-            color: #6f42c1;
-            background: #fff3cd;
-            padding: 10px 15px;
-            border-radius: 15px;
-            display: inline-block;
-            box-shadow: 3px 3px 0px #fd7e14;
-            animation: subtitleWiggle 3s ease-in-out infinite;
-        }
 
-        @keyframes subtitleWiggle {
-            0%, 100% { transform: rotate(0deg); }
-            25% { transform: rotate(1deg); }
-            75% { transform: rotate(-1deg); }
-        }
 
-        /* Scene 2: Layered paper catsss */
+.subtitle-cutout {
+    font-size: 1.2rem;
+    color: #6f42c1;
+    background: #fff3cd;
+    padding: 10px 15px;
+    border-radius: 15px;
+    display: inline-block;
+    box-shadow: 3px 3px 0px #fd7e14;
+}
+
+
+
+/* Cat layers */
 .cat-layers {
     position: relative;
     width: 450px !important;
     height: 350px !important;
     animation-delay: 0.3s;
-    max-width: none !important;
-    min-width: 450px !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
 }
-.cat-layer {
-    position: absolute;
-    background: #fefefe;
-    border-radius: 20px;
-    padding: 10px 8px !important;
-    text-align: center;
-    font-size: 0.8rem !important;
-    font-weight: 600;
-    color: #8B4513;
-    animation: layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
-    opacity: 0;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    line-height: 1.2;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
+
 .cat-layer1 {
-    top: 0px;
-    left: 0px;
-    width: 130px !important;
-    height: 110px !important;
+    top: 10px;
+    left: 10px;
+    width: 200px;
+    height: 140px;
     background: #ffe6f2;
     animation-delay: 1s;
     transform: rotate(-3deg);
@@ -392,10 +316,10 @@
 }
 
 .cat-layer2 {
-    top: 0px;
-    right: 0px;
-    width: 130px !important;
-    height: 110px !important;
+    top: 10px;
+    right: 10px;
+    width: 200px;
+    height: 140px;
     background: #e6f3ff;
     animation-delay: 1.3s;
     transform: rotate(2deg);
@@ -403,108 +327,130 @@
 }
 
 .cat-layer3 {
-    bottom: 0px;
+    bottom: 10px;
     left: 50%;
     transform: translateX(-50%) rotate(-1deg);
-    width: 130px !important;
-    height: 110px !important;
+    width: 200px;
+    height: 140px;
     background: #f0ffe6;
     animation-delay: 1.6s;
     z-index: 1;
 }
 
-        @keyframes layerPop {
-            0% {
-                opacity: 0;
-                transform: scale(0.3) rotate(0deg);
-            }
-            70% {
-                transform: scale(1.1) rotate(var(--rotation, 0deg));
-            }
-            100% {
-                opacity: 1;
-                transform: scale(1) rotate(var(--rotation, 0deg));
-            }
-        }
+.cat-layer {
+    position: absolute;
+    background: #fefefe;
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #8B4513;
+    animation: layerPop 0.8s ease-out forwards;
+    opacity: 0;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    line-height: 1.3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
-        .cat-art {
-            font-size: 3rem;
-            margin: 10px 0;
-            animation: catBounce 2s ease-in-out infinite;
-        }
+.cat-image {
+    background-image: url('assets/single-images/cat.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px !important;
+    height: 40px !important;
+    margin: 5px auto !important;
+}
 
-        @keyframes catBounce {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
+@keyframes layerPop {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
 
-        /* Scene 3: Capybara paper craft */
+
+@keyframes pieceSlide {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) translateY(0) rotate(var(--final-rotation, 0deg));
+    }
+}
+
+.cat-art {
+    margin: 5px 0;
+}
+
+/* Capybara craft */
 .capybara-craft {
-    width: 400px !important;
-    padding: 50px 50px !important;
+    width: 400px;
+    padding: 40px;
     text-align: center;
     background: linear-gradient(135deg, #d4a574 0%, #e8dcc0 100%);
     animation-delay: 0.4s;
-    max-width: none !important;
-    min-width: 480px !important;
 }
 
-        .capybara-title {
-            font-family: 'Permanent Marker', cursive;
-            font-size: 2rem;
-            color: #8B4513;
-            margin-bottom: 20px;
-            animation: titleWave 3s ease-in-out infinite;
-        }
+.capybara-title {
+    font-family: 'Permanent Marker', cursive;
+    font-size: 2rem;
+    color: #8B4513;
+    margin-bottom: 20px;
+}
 
-        @keyframes titleWave {
-            0%, 100% { transform: scale(1) skewX(0deg); }
-            50% { transform: scale(1.02) skewX(1deg); }
-        }
 
-        .zen-message {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #5d4e37;
-            background: rgba(255,255,255,0.7);
-            padding: 20px;
-            border-radius: 15px;
-            margin: 15px 0;
-            animation: messageFloat 4s ease-in-out infinite;
-            font-weight: 600;
-        }
+.zen-message {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #5d4e37;
+    background: rgba(255,255,255,0.7);
+    padding: 20px;
+    border-radius: 15px;
+    margin: 15px 0;
+    animation: messageFloat 4s ease-in-out infinite;
+    font-weight: 600;
+}
 
-        @keyframes messageFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-3px) rotate(0.5deg); }
-        }
+@keyframes messageFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-3px) rotate(0.5deg); }
+}
 
-        /* Scene 4: Matcha collage */
+/* Matcha collage */
 .matcha-collage {
-    width: 400px !important;
-    height: 480px !important;
+    width: 450px !important;
+    height: 350px !important;
     position: relative;
     animation-delay: 0.6s;
-    max-width: none !important;
-    min-width: 500px !important;
 }
 
-        .matcha-piece {
-            position: absolute;
-            background: #c8e6c9;
-            padding: 15px;
-            border-radius: 12px;
-            font-size: 1rem;
-            color: #2e7d32;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            animation: pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-            opacity: 0;
-        }
+.piece1, .piece2, .piece3, .piece4 {
+    position: absolute;
+    width: 200px;
+    height: 140px;
+    background: #c8e6c9;
+    padding: 20px;
+    border-radius: 12px;
+    font-size: 1rem;
+    color: #2e7d32;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    animation: pieceSlide 1s ease-out forwards;
+    opacity: 0;
+    line-height: 1.3;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
 
-  .piece1 {
+.piece1 {
     top: 10px;
     left: 10px;
-    width: 120px;
     animation-delay: 1.2s;
     transform: translateX(-100px) rotate(-5deg);
 }
@@ -512,7 +458,6 @@
 .piece2 {
     top: 10px;
     right: 10px;
-    width: 120px;
     background: #fff3e0;
     color: #e65100;
     animation-delay: 1.5s;
@@ -522,7 +467,6 @@
 .piece3 {
     bottom: 10px;
     left: 10px;
-    width: 120px;
     background: #f3e5f5;
     color: #7b1fa2;
     animation-delay: 1.8s;
@@ -532,385 +476,242 @@
 .piece4 {
     bottom: 10px;
     right: 10px;
-    width: 120px;
     background: #e8f5e8;
     color: #388e3c;
     animation-delay: 2.1s;
     transform: translateY(100px) rotate(4deg);
 }
 
-        @keyframes pieceSlide {
-            0% {
-                opacity: 0;
-            }
-            100% {
-                opacity: 1;
-                transform: translateX(0) translateY(0) rotate(var(--final-rotation, 0deg));
-            }
-        }
+.matcha-image {
+    background-image: url('assets/single-images/matcha.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    width: 40px !important;
+    height: 40px !important;
+    margin: 5px auto !important;
+}
 
-        /* Scene 5: Final love letter */
+
+/* Love letter */
 .love-letter {
-    width: 450px !important;
+    width: 450px;
     background: #fefefe;
-    padding: 60px 50px !important;
+    padding: 50px 40px;
     border-radius: 0;
     position: relative;
     animation-delay: 0.7s;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    max-width: none !important;
-    min-width: 520px !important;
 }
 
-        .love-letter::before {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 20px;
-            background: #ffc107;
-            border-radius: 0 0 10px 10px;
-        }
+.love-letter::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    background: #ffc107;
+    border-radius: 0 0 10px 10px;
+}
 
-        .letter-content {
-            font-family: 'Satisfy', cursive;
-            font-size: 1.4rem;
-            line-height: 1.6;
-            color: #8B4513;
-            text-align: center;
-            font-weight: 600;
-        }
+.letter-content {
+    font-family: 'Satisfy', cursive;
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: #8B4513;
+    text-align: center;
+    font-weight: 600;
+}
 
-        .signature {
-            margin-top: 30px;
-            font-size: 1.8rem;
-            color: #d63384;
-            animation: signatureDraw 3s ease-in-out infinite;
-        }
-
-
-        /* Navigation dots */
-        .nav-dots {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 12px;
-            z-index: 100;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(139, 69, 19, 0.3);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .dot.active {
-            background: #8B4513;
-            transform: scale(1.2);
-        }
-
-        /* Paper crumbs animation */
-        .paper-crumb {
-            position: fixed;
-            width: 3px;
-            height: 3px;
-            background: #d4a574;
-            border-radius: 50%;
-            opacity: 0.6;
-            animation: crumbFall 8s linear infinite;
-            pointer-events: none;
-        }
-
-        @keyframes crumbFall {
-            0% {
-                transform: translateY(-100px) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.6;
-            }
-            90% {
-                opacity: 0.6;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0;
-            }
-        }
-
-        /* Mobile responsive */
-@media (max-width: 480px) {
-  /* Scrapbook cover */
-  .scrapbook-cover {
-    width: 250px;
-    height: 330px;
-  }
-  .cover-title {
+.signature {
+    margin-top: 30px;
     font-size: 1.8rem;
-  }
-
-  /* Title card */
-  .title-card {
-    width: 280px;
-  }
-  .magazine-title {
-    font-size: 2.2rem;
-  }
-
-  /* Cat layers */
-  .cat-layers {
-    width: 280px !important;
-    height: 250px !important;
-    min-width: 280px !important;
-  }
-  .cat-layer1, .cat-layer2, .cat-layer3 {
-    width: 100px !important;
-    height: 200px !important;
-  }
-  .cat-layer1 {
-    top: 0px;
-    left: 5px;
-  }
-  .cat-layer2 {
-    top: 0px;
-    left: 155px;
-  }
-  .cat-layer3 {
-    top: 200px;
-    left: 5px;
-  }
-  .cat-layer {
-    padding: 10px !important;
-    font-size: 0.9rem !important;
-  }
-
-  /* Capybara craft */
-  .capybara-craft {
-    width: 300px !important;
-    padding: 25px 20px !important;
-    min-width: 300px !important;
-  }
-
-  /* Matcha collage */
-  .matcha-collage {
-    width: 310px !important;
-    height: 280px !important;
-    min-width: 310px !important;
-  }
-
-  /* Love letter */
-  .love-letter {
-    width: 320px !important;
-    padding: 35px 25px !important;
-    min-width: 320px !important;
-  }
-
-  /* General styles */
-  .scene {
-    padding: 15px 5px;
-  }
-  body {
-    overflow-x: hidden;
-  }
+    color: #d63384;
 }
 
-/* Additional media query for smaller screens */
+
+/* Navigation dots */
+.nav-dots {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 100;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(139, 69, 19, 0.3);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.dot.active {
+    background: #8B4513;
+    transform: scale(1.2);
+}
+
+/* Click hint */
+.click-hint {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 0.9rem;
+    color: rgba(139, 69, 19, 0.7);
+    opacity: 0.8;
+    z-index: 50;
+    animation: hintFade 3s ease-in-out infinite;
+}
+
+@keyframes hintFade {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+}
+
+/* Paper crumbs */
+.paper-crumb {
+    position: fixed;
+    width: 3px;
+    height: 3px;
+    background: #d4a574;
+    border-radius: 50%;
+    opacity: 1;
+    animation: crumbFall 8s linear infinite;
+    pointer-events: none;
+}
+
+@keyframes crumbFall {
+    0% {
+        transform: translateY(-100px) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Craft decorations */
+.washi-tape {
+    position: absolute;
+    background: linear-gradient(45deg, #ff6b9d 25%, #c44569 25%, #c44569 50%, #ff6b9d 50%, #ff6b9d 75%, #c44569 75%);
+    background-size: 8px 8px;
+    opacity: 0.8;
+    border-radius: 2px;
+}
+
+.washi-vertical {
+    width: 15px;
+    height: 60px;
+    top: 20px;
+    right: -5px;
+    transform: rotate(15deg);
+}
+
+.washi-horizontal {
+    width: 80px;
+    height: 12px;
+    bottom: 15px;
+    left: 20px;
+    transform: rotate(-8deg);
+}
+
+.paper-clip {
+    position: absolute;
+    width: 20px;
+    height: 35px;
+    border: 2px solid #silver;
+    border-radius: 8px 8px 2px 2px;
+    top: -15px;
+    right: 30px;
+    background: linear-gradient(45deg, #e0e0e0, #f5f5f5);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.paper-clip::before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 25px;
+    border: 1px solid #bbb;
+    border-radius: 6px 6px 1px 1px;
+    top: 3px;
+    left: 2px;
+    background: transparent;
+}
+
+.sticker {
+    position: absolute;
+    font-size: 1.5rem;
+    animation: stickerBounce 3s ease-in-out infinite;
+}
+
+@keyframes stickerBounce {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+}
+
+.heart-sticker { 
+    color: #ff6b9d; 
+    top: 15px; 
+    left: 15px;
+    animation-delay: 0s;
+}
+
+.star-sticker { 
+    color: #ffc107; 
+    bottom: 20px; 
+    right: 20px;
+    animation-delay: 1s;
+}
+
+.flower-sticker { 
+    color: #7bed9f; 
+    top: 50%; 
+    right: 10px;
+    animation-delay: 2s;
+}
+
+/* Mobile responsive */
+@media (max-width: 480px) {
+    .scrapbook-cover { width: 250px; height: 330px; }
+    .cover-title { font-size: 1.8rem; }
+    .title-card { width: 280px; }
+    .magazine-title { font-size: 2.2rem; }
+    
+    .cat-layers { width: 350px !important; height: 280px !important; }
+    .cat-layer1, .cat-layer2, .cat-layer3 { width: 150px; height: 110px; }
+    .cat-layer { padding: 15px; font-size: 0.9rem; }
+    .cat-image { width: 40px !important; height: 40px !important; }
+    
+    .matcha-collage { width: 350px !important; height: 280px !important; }
+    .piece1, .piece2, .piece3, .piece4 { width: 150px; height: 110px; padding: 15px; font-size: 0.9rem; }
+    .matcha-image { width: 40px !important; height: 40px !important; }
+    
+    .capybara-craft { width: 300px; padding: 30px; }
+    .love-letter { width: 320px; padding: 35px 25px; }
+    .scene { padding: 15px 5px; }
+}
+
 @media (max-width: 320px) {
-  .scrapbook-cover {
-    width: 220px;
-    height: 300px;
-  }
-  .cover-title {
-    font-size: 1.6rem;
-  }
-  .title-card {
-    width: 250px;
-  }
-  .cat-layers {
-    width: 290px !important;
-    height: 280px !important;
-    min-width: 290px !important;
-  }
-  .capybara-craft {
-    width: 310px !important;
-    padding: 25px 20px !important;
-    min-width: 310px !important;
-  }
-  .matcha-collage {
-    width: 320px !important;
-    height: 300px !important;
-    min-width: 320px !important;
-  }
-  .love-letter {
-    width: 330px !important;
-    padding: 35px 25px !important;
-    min-width: 330px !important;
-  }
+    .cat-layers { width: 260px; height: 230px; }
+    .capybara-craft { width: 280px; }
+    .matcha-collage { width: 300px; }
+    .love-letter { width: 300px; }
 }
-
-
-        /* Craft decorations */
-        .washi-tape {
-            position: absolute;
-            background: linear-gradient(45deg, #ff6b9d 25%, #c44569 25%, #c44569 50%, #ff6b9d 50%, #ff6b9d 75%, #c44569 75%);
-            background-size: 8px 8px;
-            opacity: 0.8;
-            border-radius: 2px;
-        }
-
-        .washi-vertical {
-            width: 15px;
-            height: 60px;
-            top: 20px;
-            right: -5px;
-            transform: rotate(15deg);
-        }
-
-        .washi-horizontal {
-            width: 80px;
-            height: 12px;
-            bottom: 15px;
-            left: 20px;
-            transform: rotate(-8deg);
-        }
-
-        .paper-clip {
-            position: absolute;
-            width: 20px;
-            height: 35px;
-            border: 2px solid #silver;
-            border-radius: 8px 8px 2px 2px;
-            top: -15px;
-            right: 30px;
-            background: linear-gradient(45deg, #e0e0e0, #f5f5f5);
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .paper-clip::before {
-            content: '';
-            position: absolute;
-            width: 12px;
-            height: 25px;
-            border: 1px solid #bbb;
-            border-radius: 6px 6px 1px 1px;
-            top: 3px;
-            left: 2px;
-            background: transparent;
-        }
-
-        .sticker {
-            position: absolute;
-            font-size: 1.5rem;
-            animation: stickerBounce 3s ease-in-out infinite;
-        }
-
-        @keyframes stickerBounce {
-            0%, 100% { transform: scale(1) rotate(0deg); }
-            50% { transform: scale(1.1) rotate(5deg); }
-        }
-
-        .heart-sticker { 
-            color: #ff6b9d; 
-            top: 15px; 
-            left: 15px;
-            animation-delay: 0s;
-        }
-
-        .star-sticker { 
-            color: #ffc107; 
-            bottom: 20px; 
-            right: 20px;
-            animation-delay: 1s;
-        }
-
-        .flower-sticker { 
-            color: #7bed9f; 
-            top: 50%; 
-            right: 10px;
-            animation-delay: 2s;
-        }
-
-        /* CSS-drawn cute elements */
-        .css-cat {
-            position: relative;
-            display: inline-block;
-            margin: 10px;
-        }
-
-        .css-cat::before {
-            content: '';
-            position: absolute;
-            width: 40px;
-            height: 30px;
-            background: #ff6b9d;
-            border-radius: 50% 50% 20px 20px;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .css-cat::after {
-            content: '• •';
-            position: absolute;
-            top: -5px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            color: #333;
-            letter-spacing: 8px;
-        }
-
-        .css-matcha-cup {
-            position: relative;
-            display: inline-block;
-            width: 30px;
-            height: 25px;
-            background: linear-gradient(135deg, #7fb069, #8bc34a);
-            border-radius: 0 0 15px 15px;
-            margin: 10px;
-        }
-
-        .css-matcha-cup::before {
-            content: '';
-            position: absolute;
-            width: 35px;
-            height: 8px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 50%;
-            top: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .css-matcha-cup::after {
-            content: '';
-            position: absolute;
-            width: 8px;
-            height: 12px;
-            border: 2px solid #7fb069;
-            border-left: none;
-            border-radius: 0 8px 8px 0;
-            right: -8px;
-            top: 8px;
-        }
-
-        .doodle-border {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 2px solid transparent;
-            border-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M0,0 Q25,5 50,0 T100,0 L100,10 Q75,15 50,10 T0,10 Z' fill='%23ff6b9d'/%3E%3C/svg%3E") 2;
-            border-radius: 15px;
-        }
     </style>
 </head>
 <body>
@@ -1186,21 +987,25 @@
         // Load images when page loads
         window.addEventListener('load', loadImages);
 
-        function setupStartScreen() {
-    const startScreen = document.getElementById('scene0');
-    
-    startScreen.addEventListener('click', function(e) {
-        e.preventDefault();
-        startScrapbook();
+function setupStartScreen() {
+    // Make entire document clickable for start screen
+    document.addEventListener('click', function startHandler(e) {
+        if (currentScene === 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            startScrapbook();
+            document.removeEventListener('click', startHandler);
+        }
     });
     
-    startScreen.addEventListener('touchend', function(e) {
-        e.preventDefault();
-        startScrapbook();
+    document.addEventListener('touchend', function touchStartHandler(e) {
+        if (currentScene === 0) {
+            e.preventDefault();
+            e.stopPropagation();
+            startScrapbook();
+            document.removeEventListener('touchend', touchStartHandler);
+        }
     });
-    
-    // Make the entire screen area clickable
-    startScreen.style.cursor = 'pointer';
 }
 
 // Call setup when page loads
