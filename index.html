@@ -819,18 +819,18 @@
             <div class="paper-fold paper-element love-letter">
                 <div class="paper-texture-overlay" style="opacity: 0.2;"></div>
                 <div class="letter-content">
-                    My dearest love,
+                    lorem,
                     <br><br>
-                    Like cats, capybaras, and matcha tea,
-                    you bring joy to the simplest moments.
+                    lorem, lorem,
+                    lorem, lorem
                     <br><br>
-                    Thank you for being my favorite person,
-                    my daily dose of happiness,
-                    and my forever adventure.
+                    lorem, 
+                    lorem, lorem
+                    lorem
                     <br><br>
-                    Here's to many more days of love,
-                    laughter, and sharing all our
-                    favorite things together.
+                    lorem
+                    lorem lorem
+                    lorem
                 </div>
                 <div class="signature">
                     With all my love 
@@ -995,19 +995,24 @@
 // Call setup when page loads
             setupStartScreen();
 
+            let canAdvance = false;
+
             function startScrapbook() {
                 nextScene();
                 createPaperCrumbs();
                 createConfetti();
-    // Show click hint after first page
                 createFlyingCats();
+
                 setTimeout(() => {
-                    const clickHint = document.getElementById('clickHint');
-                    if (clickHint) {
-                        clickHint.style.display = 'block';
-                    }
-                }, 1000);
+                    canAdvance = true;
+                }, 500);
             }
+
+            document.addEventListener('click', (e) => {
+                if (e.target.id !== 'scene0' && !e.target.classList.contains('dot') && currentScene > 0 && canAdvance){
+                    nextScene();
+                }
+            });
 
             function createConfetti() {
                 const colors = ['#e91e63', '#9c27b0', '#673ab7', '#ff69b4', '#ba68c8'];
