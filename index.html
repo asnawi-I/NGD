@@ -1028,47 +1028,67 @@
     }
 }
 
+// FIXED: Paper fold animation reset function
+function resetPaperFoldAnimations(sceneElement) {
+    const paperFoldElements = sceneElement.querySelectorAll('.paper-fold');
+    paperFoldElements.forEach(element => {
+        element.style.animation = 'none';
+        element.offsetHeight; // Force reflow
+        element.style.animation = 'unfoldPaper 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+    });
+}
+
 function nextScene() {
-            // Hide current scene
+    // Hide current scene
     document.querySelectorAll('.scene').forEach(scene => {
         scene.classList.remove('active');
     });
 
-            // Update navigation dots
+    // Show next scene
+    currentScene = (currentScene + 1) % totalScenes;
+    const nextSceneElement = document.getElementById(`scene${currentScene}`);
+    nextSceneElement.classList.add('active');
+
+    // Update navigation dots AFTER currentScene is updated
     document.querySelectorAll('.dot').forEach((dot, index) => {
         dot.classList.toggle('active', index === currentScene);
     });
 
-            // Show next scene
-    currentScene = (currentScene + 1) % totalScenes;
-    document.getElementById(`scene${currentScene}`).classList.add('active');
+    // FIXED: Reset paper fold animations for all scenes
+    if (currentScene > 0) {
+        setTimeout(() => {
+            resetPaperFoldAnimations(nextSceneElement);
+        }, 100);
+    }
 
-            // Restart animations for complex scenes
+    // Restart specific inner animations for complex scenes
     if (currentScene === 2) {
-                // Reset cat layer animations
-        document.querySelectorAll('.cat-layer').forEach((layer, index) => {
-            layer.style.animation = 'none';
-            setTimeout(() => {
+        // Reset cat layer animations
+        setTimeout(() => {
+            document.querySelectorAll('.cat-layer').forEach((layer, index) => {
+                layer.style.animation = 'none';
+                layer.offsetHeight; // Force reflow
                 layer.style.animation = `layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards`;
                 layer.style.animationDelay = `${1 + index * 0.3}s`;
-            }, 100);
-        });
+            });
+        }, 200);
     }
 
     if (currentScene === 4) {
-                // Reset matcha collage animations
-        document.querySelectorAll('.matcha-piece').forEach((piece, index) => {
-            piece.style.animation = 'none';
-            setTimeout(() => {
+        // Reset matcha collage animations
+        setTimeout(() => {
+            document.querySelectorAll('.matcha-piece').forEach((piece, index) => {
+                piece.style.animation = 'none';
+                piece.offsetHeight; // Force reflow
                 piece.style.animation = `pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
                 piece.style.animationDelay = `${1.2 + index * 0.3}s`;
-            }, 100);
-        });
+            });
+        }, 200);
     }
 
-            // Loop back to start after final scene
+    // Loop back to start after final scene
     if (currentScene === 0) {
-    // Back to beginning - hide click hint
+        // Back to beginning - hide click hint
         const clickHint = document.getElementById('clickHint');
         if (clickHint) {
             clickHint.style.display = 'none';
@@ -1076,16 +1096,100 @@ function nextScene() {
     }
 }
 
-        // Manual navigation - both click and touch
+// FIXED: Manual navigation - corrected the logic
 document.querySelectorAll('.dot').forEach((dot, index) => {
     dot.addEventListener('click', () => {
-        currentScene = index - 1;
-        nextScene();
+        // Hide current scene
+        document.querySelectorAll('.scene').forEach(scene => {
+            scene.classList.remove('active');
+        });
+        
+        // Set current scene directly to the clicked index
+        currentScene = index;
+        
+        // Show the target scene
+        const targetScene = document.getElementById(`scene${currentScene}`);
+        targetScene.classList.add('active');
+        
+        // Update dots
+        document.querySelectorAll('.dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentScene);
+        });
+        
+        // Reset animations for the target scene
+        if (currentScene > 0) {
+            setTimeout(() => {
+                resetPaperFoldAnimations(targetScene);
+            }, 100);
+        }
+        
+        // Handle specific scene animations
+        if (currentScene === 2) {
+            setTimeout(() => {
+                document.querySelectorAll('.cat-layer').forEach((layer, layerIndex) => {
+                    layer.style.animation = 'none';
+                    layer.offsetHeight;
+                    layer.style.animation = `layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards`;
+                    layer.style.animationDelay = `${1 + layerIndex * 0.3}s`;
+                });
+            }, 200);
+        }
+        
+        if (currentScene === 4) {
+            setTimeout(() => {
+                document.querySelectorAll('.matcha-piece').forEach((piece, pieceIndex) => {
+                    piece.style.animation = 'none';
+                    piece.offsetHeight;
+                    piece.style.animation = `pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                    piece.style.animationDelay = `${1.2 + pieceIndex * 0.3}s`;
+                });
+            }, 200);
+        }
     });
+    
     dot.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        currentScene = index - 1;
-        nextScene();
+        // Same logic as click
+        document.querySelectorAll('.scene').forEach(scene => {
+            scene.classList.remove('active');
+        });
+        
+        currentScene = index;
+        
+        const targetScene = document.getElementById(`scene${currentScene}`);
+        targetScene.classList.add('active');
+        
+        document.querySelectorAll('.dot').forEach((d, i) => {
+            d.classList.toggle('active', i === currentScene);
+        });
+        
+        if (currentScene > 0) {
+            setTimeout(() => {
+                resetPaperFoldAnimations(targetScene);
+            }, 100);
+        }
+        
+        if (currentScene === 2) {
+            setTimeout(() => {
+                document.querySelectorAll('.cat-layer').forEach((layer, layerIndex) => {
+                    layer.style.animation = 'none';
+                    layer.offsetHeight;
+                    layer.style.animation = `layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards`;
+                    layer.style.animationDelay = `${1 + layerIndex * 0.3}s`;
+                });
+            }, 200);
+        }
+        
+        if (currentScene === 4) {
+            setTimeout(() => {
+                document.querySelectorAll('.matcha-piece').forEach((piece, pieceIndex) => {
+                    piece.style.animation = 'none';
+                    piece.offsetHeight;
+                    piece.style.animation = `pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
+                    piece.style.animationDelay = `${1.2 + pieceIndex * 0.3}s`;
+                });
+            }, 200);
+        }
     });
 });
 
