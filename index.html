@@ -972,24 +972,28 @@
             window.addEventListener('load', loadImages);
 
             function setupStartScreen() {
-    // Make entire document clickable for start screen
-                document.addEventListener('click', function startHandler(e) {
-                    if (currentScene === 0) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        startScrapbook();
-                        document.removeEventListener('click', startHandler);
-                    }
-                });
+                        
+                        document.addEventListener('click', startHandler);
+                        document.addEventListener('touchend', touchStartHandler);
 
-                document.addEventListener('touchend', function touchStartHandler(e) {
-                    if (currentScene === 0) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        startScrapbook();
-                        document.removeEventListener('touchend', touchStartHandler);
-                    }
-                });
+            }
+
+
+            function globalStartHandler(e) {
+                if (currentScene === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    startScrapbook();
+                }
+            }
+
+
+            function globalTouchStartHandler(e) {
+                if (currentScene === 0) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    startScrapbook();
+                }
             }
 
 // Call setup when page loads
@@ -1007,12 +1011,6 @@
                     canAdvance = true;
                 }, 500);
             }
-
-            document.addEventListener('click', (e) => {
-                if (e.target.id !== 'scene0' && !e.target.classList.contains('dot') && currentScene > 0 && canAdvance){
-                    nextScene();
-                }
-            });
 
             function createConfetti() {
                 const colors = ['#e91e63', '#9c27b0', '#673ab7', '#ff69b4', '#ba68c8'];
@@ -1054,19 +1052,24 @@ function nextScene() {
     const nextSceneElement = document.getElementById(`scene${currentScene}`);
     nextSceneElement.classList.add('active');
 
-    // Update navigation dots AFTER currentScene is updated
+   
     document.querySelectorAll('.dot').forEach((dot, index) => {
         dot.classList.toggle('active', index === currentScene);
     });
 
-    // FIXED: Reset paper fold animations for all scenes
+    if (currentScene === 0){
+        setupStartScreen();
+        return;
+    }
+
+
     if (currentScene > 0) {
         setTimeout(() => {
             resetPaperFoldAnimations(nextSceneElement);
         }, 100);
     }
 
-    // Restart specific inner animations for complex scenes
+
     if (currentScene === 2) {
         // Reset cat layer animations
         setTimeout(() => {
@@ -1199,18 +1202,18 @@ document.querySelectorAll('.dot').forEach((dot, index) => {
 });
 
       // Click anywhere to advance - mobile and desktop
-document.addEventListener('click', (e) => {
-    if (e.target.id !== 'scene0' && !e.target.classList.contains('dot') && currentScene > 0) {
-        nextScene();
-    }
-});
 
-document.addEventListener('touchend', (e) => {
-    e.preventDefault();
-    if (e.target.id !== 'scene0' && !e.target.classList.contains('dot') && currentScene > 0) {
-        nextScene();
-    }
-});
+            document.addEventListener('click', (e) => {
+                if (currentScene === 0 || e.target.classList.contains('dot')) {
+                    return;
+                }
+                if (currentScene > 0) {
+                    nextScene();
+                }
+            });
+
+
+
         // Paper crumbs effect
 function createPaperCrumbs() {
     const container = document.getElementById('crumbContainer');
@@ -1245,13 +1248,17 @@ document.addEventListener('touchstart', (e) => {
 });
 
 document.addEventListener('touchend', (e) => {
+
+    if (currentScene === 0 || e.target.classList.contains('dot')) {
+        return;
+    }
     const endY = e.changedTouches[0].clientY;
     const endX = e.changedTouches[0].clientX;
     const diffY = startY - endY;
     const diffX = startX - endX;
 
             // Swipe up or tap to advance
-    if (Math.abs(diffY) > Math.abs(diffX) && diffY > 30) {
+    if ((Math.abs(diffY) > Math.abs(diffX) && diffY > 30) || (Math.abs(diffY) < 10 && Math.abs(diffX) < 10)) {
         if (currentScene > 0) {
             nextScene();
         }
