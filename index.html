@@ -16,7 +16,7 @@
         body {
             font-family: 'Indie Flower', cursive;
             background: linear-gradient(135deg, #f7f1e3 0%, #e8dcc0 100%);
-            min-height: 90vh;
+            min-height: 80vh;
             overflow-x: hidden;
             position: relative;
         }
@@ -70,9 +70,10 @@
     align-items: center;
     opacity: 0;
     transform: scale(0.8);
-    transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     padding: 20px 10px;
     overflow: visible;
+    will-change: transform, opacity;
 }
 
 .scene.active {
@@ -242,10 +243,12 @@
     0% { 
         left: -120px; 
         top: var(--fly-top);
+        transform: scaleX(1);
     }
     100% { 
         left: calc(100vw + 120px); 
         top: var(--fly-top);
+        transform: scaleX(1);
     }
 }
 
@@ -699,6 +702,14 @@
     .love-letter { width: 300px; }
 }
 </style>
+
+<!-- audio elements -->
+<audio id="backgroundMusic" loop>
+    <source src="assets/audio/background-music.mp3" type="audio/mpeg">
+    <source src="assets/audio/background-music.ogg" type="audio/ogg">
+</audio>
+
+
 </head>
 <body>
 
@@ -838,7 +849,6 @@
                 </div>
                 <div class="washi-tape washi-horizontal" style="background: linear-gradient(45deg, #ff6b9d 25%, #c44569 25%, #c44569 50%, #ff6b9d 50%, #ff6b9d 75%, #c44569 75%); bottom: auto; top: 20px; right: 20px; width: 60px;"></div>
                 <div class="sticker heart-sticker" style="bottom: 30px; right: 30px;">
-                    <div class="heart-sticker-img"></div>
                 </div>
                 <div class="sticker star-sticker" style="top: 15px; left: 15px; bottom: auto; right: auto;">
                     <div class="star-sticker-img"></div>
@@ -861,177 +871,103 @@
         <div id="crumbContainer"></div>
 
         <script>
-            let currentScene = 0;
-            const totalScenes = 6;
-            let autoProgress = null;
+let currentScene = 0;
+const totalScenes = 6;
 
-        // Load images from organized folders
-            async function loadImages() {
-                try {
-                // Background images
-                    const catPatternUrl = 'assets/background-images/cat-illustration.jpg';
-                    const paperTextureUrl = 'assets/background-images/paper-texture.jpg';
-                    const watercolorUrl = 'assets/background-images/watercolour-background.jpg';
-                    const firstPagePaperUrl = 'assets/background-images/paper-background.jpg';
+// Load images from organized folders
+async function loadImages() {
+    try {
+        // Background images
+        const catPatternUrl = 'assets/background-images/cat-illustration.jpg';
+        const paperTextureUrl = 'assets/background-images/paper-texture.jpg';
+        const watercolorUrl = 'assets/background-images/watercolour-background.jpg';
+        const firstPagePaperUrl = 'assets/background-images/paper-background.jpg';
 
+        // Single element images
+        const capybaraUrl = 'assets/single-images/capybara.png';
+        const matchaUrl = 'assets/single-images/matcha.png';
+        const heartStickerUrl = 'assets/single-images/heart.png';
+        const starStickerUrl = 'assets/single-images/star.png';
+        const characterUrl = 'assets/single-images/character.png';
+        const catUrl = 'assets/single-images/cat.png';
 
-                // Single element images
-                    const capybaraUrl = 'assets/single-images/capybara.png';
-                    const matchaUrl = 'assets/single-images/matcha.png';
-                    const heartStickerUrl = 'assets/single-images/heart.png';
-                    const starStickerUrl = 'assets/single-images/star.png';
-                    const characterUrl = 'assets/single-images/character.png';
-                    const catUrl = 'assets/single-images/cat.png';
-
-                // Apply images to CSS
-                    const style = document.createElement('style');
-                    style.textContent = `
-                    .cat-pattern-bg {
-                        background-image: url('${catPatternUrl}') !important;
-                    }
-                    .paper-texture-overlay {
-                        background-image: url('${paperTextureUrl}') !important;
-                    }
-                    .watercolor-bg {
-                        background-image: url('${watercolorUrl}') !important;
-                    }
-
-                    .first-page-paper {
-    background-image: url('${firstPagePaperUrl}') !important;
-    background-size: cover;
-    background-position: center;
-}
-
-                    /* Single element replacements */
-                    .capybara-image {
-                        background-image: url('${capybaraUrl}');
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        width: 120px;
-                        height: 120px;
-                        margin: 15px auto;
-                    }
-
-                    .matcha-image {
-                        background-image: url('${matchaUrl}');
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        width: 60px;
-                        height: 60px;
-                        margin: 10px auto;
-                    }
-
-                    .heart-sticker-img {
-                        background-image: url('${heartStickerUrl}');
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        width: 30px;
-                        height: 30px;
-                    }
-
-                    .star-sticker-img {
-                        background-image: url('${starStickerUrl}');
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        width: 30px;
-                        height: 30px;
-                    }
-
-                    .character-image {
-                        background-image: url('${characterUrl}');
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        width: 80px;
-                        height: 80px;
-                        margin: 20px auto;
-                    }
-
-                    .cat-image {
-                        background-image: url('${catUrl}');
-                        background-size: contain;
-                        background-repeat: no-repeat;
-                        background-position: center;
-                        width: 60px;
-                        height: 60px;
-                        margin: 10px auto;
-                    }
-                    `;
-                    document.head.appendChild(style);
-
-                } catch (error) {
-                    console.log('Using default styling - place images in assets folders');
-                }
-            }
-
-        // Load images when page loads
-            window.addEventListener('load', loadImages);
-
-            function setupStartScreen() {
-                        
-                        document.addEventListener('click', startHandler);
-                        document.addEventListener('touchend', touchStartHandler);
-
-            }
-
-
-            function globalStartHandler(e) {
-                if (currentScene === 0) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    startScrapbook();
-                }
-            }
-
-
-            function globalTouchStartHandler(e) {
-                if (currentScene === 0) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    startScrapbook();
-                }
-            }
-
-// Call setup when page loads
-            setupStartScreen();
-
-            let canAdvance = false;
-
-            function startScrapbook() {
-                nextScene();
-                createPaperCrumbs();
-                createConfetti();
-                createFlyingCats();
-
-                setTimeout(() => {
-                    canAdvance = true;
-                }, 500);
-            }
-
-            function createConfetti() {
-                const colors = ['#e91e63', '#9c27b0', '#673ab7', '#ff69b4', '#ba68c8'];
-                const isMobile = window.innerWidth <= 480;
-    const confettiCount = isMobile ? 100 : 400; // Less on mobile
-    
-    for (let i = 0; i < confettiCount; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.className = 'confetti';
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 3 + 's';
-            document.body.appendChild(confetti);
-            
-            setTimeout(() => confetti.remove(), 3000);
-        }, i * (isMobile ? 150 : 100)); // Slower spawn on mobile
+        // Apply images to CSS
+        const style = document.createElement('style');
+        style.textContent = `
+        .cat-pattern-bg {
+            background-image: url('${catPatternUrl}') !important;
+        }
+        .paper-texture-overlay {
+            background-image: url('${paperTextureUrl}') !important;
+        }
+        .watercolor-bg {
+            background-image: url('${watercolorUrl}') !important;
+        }
+        .first-page-paper {
+            background-image: url('${firstPagePaperUrl}') !important;
+            background-size: cover;
+            background-position: center;
+        }
+        .capybara-image {
+            background-image: url('${capybaraUrl}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 120px;
+            height: 120px;
+            margin: 15px auto;
+        }
+        .matcha-image {
+            background-image: url('${matchaUrl}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+        }
+        .heart-sticker-img {
+            background-image: url('${heartStickerUrl}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 30px;
+            height: 30px;
+        }
+        .star-sticker-img {
+            background-image: url('${starStickerUrl}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 30px;
+            height: 30px;
+        }
+        .character-image {
+            background-image: url('${characterUrl}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 80px;
+            height: 80px;
+            margin: 20px auto;
+        }
+        .cat-image {
+            background-image: url('${catUrl}');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            width: 60px;
+            height: 60px;
+            margin: 10px auto;
+        }
+        `;
+        document.head.appendChild(style);
+    } catch (error) {
+        console.log('Using default styling - place images in assets folders');
     }
 }
 
-// FIXED: Paper fold animation reset function
+// Paper fold animation reset function
 function resetPaperFoldAnimations(sceneElement) {
     const paperFoldElements = sceneElement.querySelectorAll('.paper-fold');
     paperFoldElements.forEach(element => {
@@ -1041,6 +977,7 @@ function resetPaperFoldAnimations(sceneElement) {
     });
 }
 
+// Main scene navigation function
 function nextScene() {
     // Hide current scene
     document.querySelectorAll('.scene').forEach(scene => {
@@ -1052,30 +989,31 @@ function nextScene() {
     const nextSceneElement = document.getElementById(`scene${currentScene}`);
     nextSceneElement.classList.add('active');
 
-   
+    // Update navigation dots
     document.querySelectorAll('.dot').forEach((dot, index) => {
         dot.classList.toggle('active', index === currentScene);
     });
 
-    if (currentScene === 0){
-        setupStartScreen();
+
+    // Handle start screen setup when returning to scene 0
+    if (currentScene === 0) {
+        stopBackgroundMusic();
         return;
     }
 
-
+    // Reset paper fold animations for all scenes except start screen
     if (currentScene > 0) {
         setTimeout(() => {
             resetPaperFoldAnimations(nextSceneElement);
         }, 100);
     }
 
-
+    // Handle specific scene animations
     if (currentScene === 2) {
-        // Reset cat layer animations
         setTimeout(() => {
             document.querySelectorAll('.cat-layer').forEach((layer, index) => {
                 layer.style.animation = 'none';
-                layer.offsetHeight; // Force reflow
+                layer.offsetHeight;
                 layer.style.animation = `layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards`;
                 layer.style.animationDelay = `${1 + index * 0.3}s`;
             });
@@ -1083,30 +1021,102 @@ function nextScene() {
     }
 
     if (currentScene === 4) {
-        // Reset matcha collage animations
         setTimeout(() => {
             document.querySelectorAll('.matcha-piece').forEach((piece, index) => {
                 piece.style.animation = 'none';
-                piece.offsetHeight; // Force reflow
+                piece.offsetHeight;
                 piece.style.animation = `pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
                 piece.style.animationDelay = `${1.2 + index * 0.3}s`;
             });
         }, 200);
     }
+}
 
-    // Loop back to start after final scene
-    if (currentScene === 0) {
-        // Back to beginning - hide click hint
-        const clickHint = document.getElementById('clickHint');
-        if (clickHint) {
-            clickHint.style.display = 'none';
-        }
+// Start scrapbook function
+function startScrapbook() {
+    nextScene();
+    createPaperCrumbs();
+    createConfetti();
+    createFlyingCats();
+    playBackgroundMusic();
+}
+
+// Confetti effect
+function createConfetti() {
+    const colors = ['#e91e63', '#9c27b0', '#673ab7', '#ff69b4', '#ba68c8'];
+    const isMobile = window.innerWidth <= 480;
+    const confettiCount = isMobile ? 50 : 150;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 3 + 's';
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 3000);
+        }, i * (isMobile ? 200 : 150));
     }
 }
 
-// FIXED: Manual navigation - corrected the logic
+// Paper crumbs effect
+function createPaperCrumbs() {
+    const container = document.getElementById('crumbContainer');
+
+    setInterval(() => {
+        if (Math.random() < 0.3) {
+            const crumb = document.createElement('div');
+            crumb.className = 'paper-crumb';
+            crumb.style.left = Math.random() * 100 + '%';
+            crumb.style.animationDelay = '0s';
+            crumb.style.animationDuration = `${6 + Math.random() * 4}s`;
+
+            const colors = ['#d4a574', '#e8dcc0', '#8B4513', '#f7f1e3'];
+            crumb.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+            container.appendChild(crumb);
+
+            setTimeout(() => {
+                crumb.remove();
+            }, 10000);
+        }
+    }, 1500);
+}
+
+// Flying cats effect
+function createFlyingCats() {
+    setInterval(() => {
+        if (Math.random() < 0.2) {
+            const cat = document.createElement('div');
+            cat.className = 'flying-cat';
+            const flyTop = Math.random() * 60 + 10 + '%';
+            cat.style.setProperty('--fly-top', flyTop);
+            
+            if (Math.random() > 0.5) {
+                cat.classList.add('flying-right');
+            } else {
+                cat.classList.add('flying-left');  
+            }
+            
+            document.body.appendChild(cat);
+            
+            setTimeout(() => {
+                if (cat.parentNode) {
+                    cat.remove();
+                }
+            }, 8000);
+        }
+    }, 5000);
+}
+
+// Initialize when page loads
+window.addEventListener('load', loadImages);
+
+// Dot navigation handlers
 document.querySelectorAll('.dot').forEach((dot, index) => {
-    dot.addEventListener('click', () => {
+    function handleDotClick() {
         // Hide current scene
         document.querySelectorAll('.scene').forEach(scene => {
             scene.classList.remove('active');
@@ -1153,143 +1163,92 @@ document.querySelectorAll('.dot').forEach((dot, index) => {
                 });
             }, 200);
         }
-    });
+    }
     
+    dot.addEventListener('click', handleDotClick);
     dot.addEventListener('touchstart', (e) => {
         e.preventDefault();
-        // Same logic as click
-        document.querySelectorAll('.scene').forEach(scene => {
-            scene.classList.remove('active');
-        });
-        
-        currentScene = index;
-        
-        const targetScene = document.getElementById(`scene${currentScene}`);
-        targetScene.classList.add('active');
-        
-        document.querySelectorAll('.dot').forEach((d, i) => {
-            d.classList.toggle('active', i === currentScene);
-        });
-        
-        if (currentScene > 0) {
-            setTimeout(() => {
-                resetPaperFoldAnimations(targetScene);
-            }, 100);
-        }
-        
-        if (currentScene === 2) {
-            setTimeout(() => {
-                document.querySelectorAll('.cat-layer').forEach((layer, layerIndex) => {
-                    layer.style.animation = 'none';
-                    layer.offsetHeight;
-                    layer.style.animation = `layerPop 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards`;
-                    layer.style.animationDelay = `${1 + layerIndex * 0.3}s`;
-                });
-            }, 200);
-        }
-        
-        if (currentScene === 4) {
-            setTimeout(() => {
-                document.querySelectorAll('.matcha-piece').forEach((piece, pieceIndex) => {
-                    piece.style.animation = 'none';
-                    piece.offsetHeight;
-                    piece.style.animation = `pieceSlide 1s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards`;
-                    piece.style.animationDelay = `${1.2 + pieceIndex * 0.3}s`;
-                });
-            }, 200);
-        }
+        handleDotClick();
     });
 });
 
-      // Click anywhere to advance - mobile and desktop
+// Detect if device supports touch
+let isTouchDevice = false;
 
-            document.addEventListener('click', (e) => {
-                if (currentScene === 0 || e.target.classList.contains('dot')) {
-                    return;
-                }
-                if (currentScene > 0) {
-                    nextScene();
-                }
-            });
-
-
-
-        // Paper crumbs effect
-function createPaperCrumbs() {
-    const container = document.getElementById('crumbContainer');
-
-    setInterval(() => {
-        if (Math.random() < 0.4) {
-            const crumb = document.createElement('div');
-            crumb.className = 'paper-crumb';
-            crumb.style.left = Math.random() * 100 + '%';
-            crumb.style.animationDelay = '0s';
-            crumb.style.animationDuration = `${6 + Math.random() * 4}s`;
-
-            const colors = ['#d4a574', '#e8dcc0', '#8B4513', '#f7f1e3'];
-            crumb.style.background = colors[Math.floor(Math.random() * colors.length)];
-
-            container.appendChild(crumb);
-
-            setTimeout(() => {
-                crumb.remove();
-            }, 10000);
-        }
-    }, 1000);
-}
-
-        // Touch/swipe support for mobile
+// Touch support variables
 let startY = 0;
 let startX = 0;
 
 document.addEventListener('touchstart', (e) => {
+    isTouchDevice = true; // Mark as touch device
     startY = e.touches[0].clientY;
     startX = e.touches[0].clientX;
 });
 
 document.addEventListener('touchend', (e) => {
-
-    if (currentScene === 0 || e.target.classList.contains('dot')) {
+    // Handle start screen
+    if (currentScene === 0 && !e.target.classList.contains('dot')) {
+        e.preventDefault();
+        startScrapbook();
         return;
     }
-    const endY = e.changedTouches[0].clientY;
-    const endX = e.changedTouches[0].clientX;
-    const diffY = startY - endY;
-    const diffX = startX - endX;
+    
+    // Skip if touching dots (they have their own handlers)
+    if (e.target.classList.contains('dot')) {
+        return;
+    }
+    
+    // Handle regular scene advancement
+    if (currentScene > 0) {
+        const endY = e.changedTouches[0].clientY;
+        const endX = e.changedTouches[0].clientX;
+        const diffY = startY - endY;
+        const diffX = startX - endX;
 
-            // Swipe up or tap to advance
-    if ((Math.abs(diffY) > Math.abs(diffX) && diffY > 30) || (Math.abs(diffY) < 10 && Math.abs(diffX) < 10)) {
-        if (currentScene > 0) {
+        // Swipe up OR simple tap to advance
+        if ((Math.abs(diffY) > Math.abs(diffX) && diffY > 30) || (Math.abs(diffY) < 10 && Math.abs(diffX) < 10)) {
             nextScene();
         }
     }
 });
 
-
-function createFlyingCats() {
-    setInterval(() => {
-        if (Math.random() < 0.3) {
-            const cat = document.createElement('div');
-            cat.className = 'flying-cat';
-            const flyTop = Math.random() * 60 + 10 + '%';
-            cat.style.setProperty('--fly-top', flyTop);
-            
-            if (Math.random() > 0.5) {
-                cat.classList.add('flying-right');
-            } else {
-                cat.classList.add('flying-left');  
-            }
-            
-            document.body.appendChild(cat);
-            
-            setTimeout(() => {
-                if (cat.parentNode) {  /* PREVENT STUCK CATS */
-                cat.remove();
-            }
-            }, 8000);  /* LONGER CLEANUP TIME */
-        }
-    }, 3000);  /* LESS FREQUENT */
+// Click handler - only for non-touch devices
+document.addEventListener('click', (e) => {
+    // Don't handle clicks on touch devices to prevent double firing
+    if (isTouchDevice) {
+        return;
     }
+    
+    // Handle start screen
+    if (currentScene === 0 && !e.target.classList.contains('dot')) {
+        startScrapbook();
+        return;
+    }
+    
+    // Skip if clicking dots
+    if (e.target.classList.contains('dot')) {
+        return;
+    }
+    
+    // Advance scenes
+    if (currentScene > 0) {
+        nextScene();
+    }
+});
+
+
+// Background music management
+const backgroundMusic = document.getElementById('backgroundMusic');
+
+function playBackgroundMusic() {
+    backgroundMusic.volume = 0.3; // 30% volume
+    backgroundMusic.play().catch(e => console.log('Auto-play prevented'));
+}
+
+function stopBackgroundMusic() {
+    backgroundMusic.pause();
+    backgroundMusic.currentTime = 0;
+}
 </script>
 </body>
 </html>
