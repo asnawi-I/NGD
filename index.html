@@ -243,12 +243,12 @@
     0% { 
         left: -120px; 
         top: var(--fly-top);
-        transform: scaleX(1);
+        transform: scaleX(-1);
     }
     100% { 
         left: calc(100vw + 120px); 
         top: var(--fly-top);
-        transform: scaleX(1);
+        transform: scaleX(-1);
     }
 }
 
@@ -256,12 +256,12 @@
     0% { 
         right: -120px; 
         top: var(--fly-top);
-        transform: scaleX(-1);
+        transform: scaleX(1);
     }
     100% { 
         right: calc(100vw + 120px); 
         top: var(--fly-top);
-        transform: scaleX(-1);
+        transform: scaleX(1);
     }
 }
 
@@ -1236,11 +1236,11 @@ document.addEventListener('click', (e) => {
 });
 
 
-// Background music management
+
 const backgroundMusic = document.getElementById('backgroundMusic');
 
 function playBackgroundMusic() {
-    backgroundMusic.volume = 0.3; // 30% volume
+    backgroundMusic.volume = 0.3; 
     backgroundMusic.play().catch(e => console.log('Auto-play prevented'));
 }
 
